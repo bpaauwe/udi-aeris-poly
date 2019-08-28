@@ -128,11 +128,13 @@ class Controller(polyinterface.Controller):
         # frequently, probably as often as once a minute.
         #
         # By default JSON is returned
-        # http://api.openweathermap.org/data/2.5/weather?
+
+        # TODO: should this be changed to use requests instead of urllib?
 
         request = 'http://api.aerisapi.com/observations/'
         # if location looks like a zip code, treat it as such for backwards
         # compatibility
+        # TODO: handle location entries properly
         if re.fullmatch(r'\d\d\d\d\d,..', self.location) != None:
             request += self.location
         elif re.fullmatch(r'\d\d\d\d\d', self.location) != None:
@@ -492,24 +494,23 @@ class Controller(polyinterface.Controller):
 
     # For this node server, all of the info is available in the single
     # controller node.
-    #
-    # TODO: Do we want to try and do evapotranspiration calculations? 
-    #       maybe later as an enhancement.
-    # TODO: Add forecast data
     drivers = [
             {'driver': 'ST', 'value': 1, 'uom': 2},   # node server status
             {'driver': 'CLITEMP', 'value': 0, 'uom': 4},   # temperature
             {'driver': 'CLIHUM', 'value': 0, 'uom': 22},   # humidity
+            {'driver': 'DEWPT', 'value': 0, 'uom': 4},     # dewpoint
             {'driver': 'BARPRES', 'value': 0, 'uom': 118}, # pressure
             {'driver': 'WINDDIR', 'value': 0, 'uom': 76},  # direction
-            {'driver': 'GV0', 'value': 0, 'uom': 4},       # max temp
-            {'driver': 'GV1', 'value': 0, 'uom': 4},       # min temp
             {'driver': 'GV4', 'value': 0, 'uom': 49},      # wind speed
+            {'driver': 'GV5', 'value': 0, 'uom': 49},      # gust speed
+            {'driver': 'GV0', 'value': 0, 'uom': 4},       # heat index
+            {'driver': 'GV1', 'value': 0, 'uom': 4},       # wind chill
+            {'driver': 'GV2', 'value': 0, 'uom': 4},       # feels like
             {'driver': 'GV6', 'value': 0, 'uom': 82},      # rain
             {'driver': 'GV13', 'value': 0, 'uom': 25},     # climate conditions
             {'driver': 'GV14', 'value': 0, 'uom': 22},     # cloud conditions
             {'driver': 'GV15', 'value': 0, 'uom': 83},     # visibility
-            {'driver': 'GV16', 'value': 0, 'uom': 71},     # UV index
+            {'driver': 'SOLRAD', 'value': 0, 'uom': 71},   # solar radiataion
             ]
 
 
