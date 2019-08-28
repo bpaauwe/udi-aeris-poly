@@ -224,25 +224,36 @@ class Controller(polyinterface.Controller):
         self.update_driver('CLIHUM', ob['humidity'], self.uom['CLIHUM'])
         self.update_driver('BARPRES', ob['pressureMB'], self.uom['BARPRES'])
         self.update_driver('GV4', ob['windSpeedKPH'], self.uom['GV4'])
+        self.update_driver('GV5', ob['windGustKPH'], self.uom['GV5'])
         self.update_driver('WINDDIR', ob['windDirDEG'], self.uom['WINDDIR'])
         self.update_driver('GV15', ob['visibilityKM'], self.uom['GV15'])
         self.update_driver('GV6', ob['precipMM'], self.uom['GV6'])
+        self.update_driver('DEWPT', ob['dewpointC'], self.uom['DEWPOINT'])
+        self.update_driver('GV0', ob['heatindexC'], self.uom['GV0'])
+        self.update_driver('GV1', ob['windchillC'], self.uom['GV1'])
+        self.update_driver('GV2', ob['feelslikeC'], self.uom['GV2'])
+        self.update_driver('SOLRAD', ob['solradWM2'], self.uom['SOLRAD'])
+        # Weather conditions:
+        #  ob['weather']
+        #  ob['weatherShort']
+        #  ob['weatherCoded']
+        #    [coverage] : [intensity] : [weather]
+        #     -- these can be mapped to strings
+        weather = ob['weatherCoded'].split(':')[2]
+        self.update_driver('GV13', weather_code(weather), self.uom['GV13'])
+
+        # cloud cover
+        #  ob['cloudsCoded'] ??
+        self.update_driver('GV14', ob['sky'], self.uom['GV14'])
 
         '''
         TODO:
            - dewpoint
            - altimeter?
-           - wind gusts
            - weather
-           - heatindex
-           - windchill
-           - feelslike
            - snow depth
-           - solar radiation
            - ceiling
            - light
-           - QC / QCcode
-           - sky
         '''
 
 
@@ -484,6 +495,44 @@ class Controller(polyinterface.Controller):
 
     def remove_notices_all(self, command):
         self.removeNoticesAll()
+
+    def weather_codes(self, code):
+        code_map = {
+                'A': 0,   # hail
+                'BD': 1,  # blowing dust
+                'BN': 2,  # blowing sand
+                'BR': 3,  # mist
+                'BS': 4,  # blowing snow
+                'BY': 5,  # blowing spray
+                'F': 6,   # fog
+                'FR': 7,  # frost
+                'H': 8,   # haze
+                'IC': 9,  # ice crystals
+                'IF': 10, # ice fog
+                'IP': 11, # ice pellets / Sleet
+                'K': 12,  # smoke
+                'L': 13,  # drizzle
+                'R': 14,  # rain
+                'RW': 15, # rain showers
+                'RS': 16, # rain/snow mix
+                'SI': 17, # snow/sleet mix
+                'WM': 18, # wintry mix (sno, sleet, rain)
+                'S': 19,  # snow
+                'SW': 20, # snow showers
+                'T': 21,  # Thunderstorms
+                'UP': 22, # unknown precipitation
+                'VA': 23, # volcanic ash
+                'WP': 24, # waterspouts
+                'ZF': 25, # freezing fog
+                'ZL': 26, # freezing drizzle
+                'ZR': 27, # freezing rain
+                'ZY': 28, # freezing spray
+                }
+
+        if code in code_map:
+            return code_map[code]
+
+        return 22
 
 
     commands = {
