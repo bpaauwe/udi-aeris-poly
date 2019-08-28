@@ -534,6 +534,39 @@ class Controller(polyinterface.Controller):
 
         return 22
 
+    def intensity_codes(self, code):
+        code_map = {
+                'VL': 1,  # very light
+                'L': 2,   # light
+                'H': 3,   # heavy
+                'VH': 4,  # very heavy
+                }
+        if code in code_map:
+            return code_map[code]
+        return 0  # moderate
+
+    def coverage_codes(self, code):
+        code_map = {
+                'AR': 0,  # areas of
+                'BR': 1,  # brief
+                'C':  2,  # chance of
+                'D':  3,  # definite
+                'FQ': 4,  # frequent
+                'IN': 5,  # intermittent
+                'IS': 6,  # isolated
+                'L':  7,  # likely
+                'NM': 8,  # numerous
+                'O':  9,  # occasional
+                'PA': 10,  # patchy
+                'PD': 11,  # periods of
+                'S':  12,  # slight chance
+                'SC': 13,  # scattered
+                'VC': 14,  # in the vicinity/nearby
+                'WD': 15,  # widespread
+                }
+        if code in code_map:
+            return code_map[code]
+
 
     commands = {
             'DISCOVER': discover,
