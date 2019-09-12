@@ -269,22 +269,23 @@ class Controller(polyinterface.Controller):
         '''
 
     def query_forecast(self):
-        # Three hour forecast for 5 days (or about 30 entries). This
-        # is probably too much data to send to the ISY and there isn't
-        # really a good way to deal with this. Would it make sense
-        # to pick one of the entries for the day and just use that?
+        # 7 day forecast
 
-        request = 'http://api.openweathermap.org/data/2.5/forecast?'
+        request = 'http://api.aerisapi.com/forecast/'
         # if location looks like a zip code, treat it as such for backwards
         # compatibility
+        # TODO: handle location entries properly
         if re.fullmatch(r'\d\d\d\d\d,..', self.location) != None:
-            request += 'zip=' + self.location
+            request += self.location
         elif re.fullmatch(r'\d\d\d\d\d', self.location) != None:
-            request += 'zip=' + self.location
+            request += self.location
         else:
             request += self.location
-        request += '&units=' + self.units
-        request += '&appid=' + self.apikey
+
+        request += '?client_id=JGlB9OD1KA1EvzoSkpBmJ'
+        request += '&client_secret=xiZGRDGO61ZP2YZH1YDwVB6tuDMX4Zx3o9yeXDyI'
+        request += '&filter=mdnt2mdnt'
+        request += '&precise'
 
         LOGGER.debug('request = %s' % request)
 
@@ -296,102 +297,31 @@ class Controller(polyinterface.Controller):
         c = http.request('GET', request)
         wdata = c.data
         c.close()
-
-        # query UV forecast
-        request = 'http://api.openweathermap.org/data/2.5/uvi/forecast?'
-        request += 'appid=' + self.apikey
-        # Only query by lat/lon so need to pull that from jdata
-        request += '&lat=' + str(self.latitude)
-        request += '&lon=' + str(self.longitude)
-        c = http.request('GET', request)
-        uv_data = json.loads(c.data.decode('utf-8'))
-        c.close()
-        #LOGGER.debug(uv_data)
-
         http.clear()
 
         jdata = json.loads(wdata.decode('utf-8'))
 
-        #LOGGER.debug(jdata)
+        LOGGER.debug(jdata)
 
-        # Records are for 3 hour intervals starting at midnight UTC time
-        # this makes it difficult to map to local day forecasts.
-        # Also note that this may start in the middle of the current day
-        # so we need to skip those values.  This also means that we may
-        # not end at 21:00.
+        # Records are for each day, midnight to midnight
         day = 1
-        start = False
-        count = 0
-        if 'list' in jdata:
-            for forecast in jdata['list']:
+        if 'period' in jdata['response'][0]:
+            for forecast in jdata['response'][0]['periods']:
+                self.fcast['temp_max'] = forecast['maxTempC']
+                self.fcast['temp_min'] = forecast['minTempC']
+                self.fcast['Hmax'] = forecast['maxHumidity']
+                self.fcast['Hmin'] = forecast['minHumidity']
+                self.fcast['pressure'] = float(forecast['pressureMB'])
+                self.fcast['speed'] = float(forecast['windSpeedKPH'])
+                # look at weatherPrimaryCoded and cloudsCoded and
+                # build the forecast conditions
+                self.fcast['clouds'] = forecast['cloudsCoded']
 
-                # we need to look at every 3 hr entry and build the 
-                # temp and humidity min/max and also average for pressure
-                # and wind speed. Looking at only the first 3 hrs isn't
-                # really usefull
-                dt = forecast['dt_txt'].split(' ')
-
-                LOGGER.info('date and time: %s %s' % (dt[0], dt[1]))
-                #if dt[1] != '12:00:00':
-                #    continue
-
-                if dt[1] == '00:00:00':
-                    # Initialize values
-                    self.fcast['temp_max'] = float(forecast['main']['temp_max'])
-                    self.fcast['temp_min'] = float(forecast['main']['temp_min'])
-                    self.fcast['Hmax'] = float(forecast['main']['humidity'])
-                    self.fcast['Hmin'] = float(forecast['main']['humidity'])
-                    self.fcast['pressure'] = float(forecast['main']['pressure'])
-                    self.fcast['weather'] = float(forecast['weather'][0]['id'])
-                    self.fcast['speed'] = float(forecast['wind']['speed'])
-                    self.fcast['clouds'] = float(forecast['clouds']['all'])
-                    self.fcast['dt'] = forecast['dt']
-                    start = True
-                    count = 1
-                    try:
-                        self.fcast['uv'] = uv_data[day - 1]['value']
-                    except:
-                        self.fcast['uv'] = 0
-                elif start:
-                    # check for high/low
-                    if float(forecast['main']['temp_max']) > self.fcast['temp_max']:
-                        self.fcast['temp_max'] = float(forecast['main']['temp_max'])
-                    if float(forecast['main']['temp_min']) < self.fcast['temp_min']:
-                        self.fcast['temp_min'] = float(forecast['main']['temp_min'])
-                    if float(forecast['main']['humidity']) > self.fcast['Hmax']:
-                        self.fcast['Hmax'] = float(forecast['main']['humidity'])
-                    if float(forecast['main']['humidity']) < self.fcast['Hmin']:
-                        self.fcast['Hmin'] = float(forecast['main']['humidity'])
-
-                    # sum for averages
-                    self.fcast['pressure'] += float(forecast['main']['pressure'])
-                    self.fcast['speed'] += float(forecast['wind']['speed'])
-                    self.fcast['clouds'] += float(forecast['clouds']['all'])
-                    count += 1
-                #else:
-
-
-                if dt[1] == '21:00:00' and start:
-                    self.fcast['pressure'] /= 8
-                    self.fcast['speed'] /= 8
-                    self.fcast['clouds'] /= 8
-                    LOGGER.info(self.fcast)
-                    # Update the forecast
-                    address = 'forecast_' + str(day)
-                    self.nodes[address].update_forecast(self.fcast, self.latitude, self.elevation, self.plant_type, self.units)
-                    day += 1
-                    start = False
-                    count = 0
-
-            if start:
-                LOGGER.info('Partial day forecast ' + str(count))
-                self.fcast['pressure'] /= count
-                self.fcast['speed'] /= count
-                self.fcast['clouds'] /= count
                 LOGGER.info(self.fcast)
-                 # Update the forecast
+                # Update the forecast
                 address = 'forecast_' + str(day)
-                self.nodes[address].update_forecast(self.fcast, self.latitude, 400, 0.23, self.units)
+                self.nodes[address].update_forecast(self.fcast, self.latitude, self.elevation, self.plant_type, self.units)
+                day += 1
 
 
     def query(self):
@@ -569,7 +499,6 @@ class Controller(polyinterface.Controller):
 
 
     commands = {
-            'DISCOVER': discover,
             'UPDATE_PROFILE': update_profile,
             'REMOVE_NOTICES_ALL': remove_notices_all
             }
