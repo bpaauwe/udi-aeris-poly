@@ -42,6 +42,7 @@ class Controller(polyinterface.Controller):
         self.plant_type = 0.23
         self.elevation = 0
         self.uom = {}
+        self.tag = {}
 
         self.poly.onConfig(self.process_config)
 
@@ -159,45 +160,6 @@ class Controller(polyinterface.Controller):
         c.close()
         LOGGER.debug(jdata)
 
-        '''
-        try:
-            self.latitude = jdata['coord']['lat']
-            self.longitude = jdata['coord']['lon']
-
-            # Query UV index data
-            request = 'http://api.openweathermap.org/data/2.5/uvi?'
-            request += 'appid=' + self.apikey
-            # Only query by lat/lon so need to pull that from jdata
-            request += '&lat=' + str(jdata['coord']['lat'])
-            request += '&lon=' + str(jdata['coord']['lon'])
-            try:
-                c = http.request('GET', request)
-                uv_data = json.loads(c.data.decode('utf-8'))
-                c.close()
-                LOGGER.debug('UV index = %f' % uv_data['value'])
-            except:
-                LOGGER.debug('UV data is not valid.')
-
-            # for kicks, lets try getting pollution info
-            request = 'http://api.openweathermap.org/pollution/v1/co/'
-            request += str(jdata['coord']['lat']) + ','
-            request += str(jdata['coord']['lon'])
-            request += '/current.json?'
-            request += 'appid=' + self.apikey
-            # Only query by lat/lon so need to pull that from jdata
-            LOGGER.debug(request)
-            try:
-                c = http.request('GET', request)
-                pollution_data = json.loads(c.data.decode('utf-8'))
-                c.close()
-                LOGGER.debug(pollution_data)
-            except:
-                LOGGER.debug('pollution data is not valid')
-
-        except:
-            LOGGER.debug('Skipping UV and Pollution data, no location info')
-
-        '''
         http.clear()
         # Should we check that jdata actually has something in it?
         if jdata == None:
@@ -220,19 +182,19 @@ class Controller(polyinterface.Controller):
 
         ob = jdata['response']['ob']
 
-        self.update_driver('CLITEMP', ob['tempC'], self.uom['CLITEMP'])
-        self.update_driver('CLIHUM', ob['humidity'], self.uom['CLIHUM'])
-        self.update_driver('BARPRES', ob['pressureMB'], self.uom['BARPRES'])
-        self.update_driver('GV4', ob['windSpeedKPH'], self.uom['GV4'])
-        self.update_driver('GV5', ob['windGustKPH'], self.uom['GV5'])
-        self.update_driver('WINDDIR', ob['windDirDEG'], self.uom['WINDDIR'])
-        self.update_driver('GV15', ob['visibilityKM'], self.uom['GV15'])
-        self.update_driver('GV6', ob['precipMM'], self.uom['GV6'])
-        self.update_driver('DEWPT', ob['dewpointC'], self.uom['DEWPOINT'])
-        self.update_driver('GV0', ob['heatindexC'], self.uom['GV0'])
-        self.update_driver('GV1', ob['windchillC'], self.uom['GV1'])
-        self.update_driver('GV2', ob['feelslikeC'], self.uom['GV2'])
-        self.update_driver('SOLRAD', ob['solradWM2'], self.uom['SOLRAD'])
+        self.update_driver('CLITEMP', ob[self.tag['temperature']], self.uom['CLITEMP'])
+        self.update_driver('CLIHUM', ob[self.tag['humidity']], self.uom['CLIHUM'])
+        self.update_driver('BARPRES', ob[self.tag['pressure']], self.uom['BARPRES'])
+        self.update_driver('GV4', ob[self.tag['windspeed']], self.uom['GV4'])
+        self.update_driver('GV5', ob[self.tag['gustspeed']], self.uom['GV5'])
+        self.update_driver('WINDDIR', ob[self.tag['winddir']], self.uom['WINDDIR'])
+        self.update_driver('GV15', ob[self.tag['visibility']], self.uom['GV15'])
+        self.update_driver('GV6', ob[self.tag['precipitation']], self.uom['GV6'])
+        self.update_driver('DEWPT', ob[self.tag['dewpoint']], self.uom['DEWPOINT'])
+        self.update_driver('GV0', ob[self.tag['heatindex']], self.uom['GV0'])
+        self.update_driver('GV1', ob[self.tag['windchill']], self.uom['GV1'])
+        self.update_driver('GV2', ob[self.tag['feelslike']], self.uom['GV2'])
+        self.update_driver('SOLRAD', ob[self.tag['solarrad']], self.uom['SOLRAD'])
         # Weather conditions:
         #  ob['weather']
         #  ob['weatherShort']
@@ -240,7 +202,7 @@ class Controller(polyinterface.Controller):
         #    [coverage] : [intensity] : [weather]
         #     -- these can be mapped to strings
         weather = ob['weatherCoded'].split(':')[2]
-        self.update_driver('GV13', weather_code(weather), self.uom['GV13'])
+        self.update_driver('GV13', self.weather_codes(weather), self.uom['GV13'])
 
         # cloud cover
         #  ob['cloudsCoded'] ??
@@ -248,7 +210,6 @@ class Controller(polyinterface.Controller):
 
         '''
         TODO:
-           - dewpoint
            - altimeter?
            - weather
            - snow depth
@@ -258,8 +219,8 @@ class Controller(polyinterface.Controller):
 
 
         '''
-        #self.update_driver('GV0', jdata['main']['temp_max'], self.uom['GV0'])
-        #self.update_driver('GV1', jdata['main']['temp_min'], self.uom['GV1'])
+        self.update_driver('GV0', jdata['main']['temp_max'], self.uom['GV0'])
+        self.update_driver('GV1', jdata['main']['temp_min'], self.uom['GV1'])
         if 'clouds' in jdata:
             self.update_driver('GV14', jdata['clouds']['all'], self.uom['GV14'])
         if 'weather' in jdata:
@@ -388,14 +349,32 @@ class Controller(polyinterface.Controller):
             self.uom['CLIHUM'] = 22   # humidity
             self.uom['BARPRES'] = 118 # pressure
             self.uom['WINDDIR'] = 76  # direction
+            self.uom['DEWPOINT'] = 4  # dew point
             self.uom['GV0'] = 4       # max temp
             self.uom['GV1'] = 4       # min temp
+            self.uom['GV2'] = 4       # feels like
             self.uom['GV4'] = 49      # wind speed
+            self.uom['GV5'] = 49      # wind gusts
             self.uom['GV6'] = 82      # rain
             self.uom['GV13'] = 25     # climate conditions
             self.uom['GV14'] = 22     # cloud conditions
             self.uom['GV15'] = 83     # visibility
             self.uom['GV16'] = 71     # UV index
+            self.uom['SOLRAD'] = 74   # solar radiation
+
+            self.tag['temperature'] = 'tempC'
+            self.tag['humidity'] = 'humidity'
+            self.tag['pressure'] = 'pressureMB'
+            self.tag['windspeed'] = 'windSpeedKPH'
+            self.tag['gustspeed'] = 'windGustKPH'
+            self.tag['winddir'] = 'windDirDEG'
+            self.tag['visibility'] = 'visibilityKM'
+            self.tag['precipitation'] = 'precipMM'
+            self.tag['dewpoint'] = 'dewpointC'
+            self.tag['heatindex'] = 'heatindexC'
+            self.tag['windchill'] = 'windchillC'
+            self.tag['feelslike'] = 'feelslikeC'
+            self.tag['solarrad'] = 'solradWM2'
 
             '''
             for day in range(1,6):
@@ -408,14 +387,32 @@ class Controller(polyinterface.Controller):
             self.uom['CLIHUM'] = 22   # humidity
             self.uom['BARPRES'] = 118 # pressure
             self.uom['WINDDIR'] = 76  # direction
+            self.uom['DEWPOINT'] = 17 # dew point
             self.uom['GV0'] = 17      # max temp
             self.uom['GV1'] = 17      # min temp
+            self.uom['GV2'] = 17      # feels like
             self.uom['GV4'] = 48      # wind speed
+            self.uom['GV5'] = 48      # wind gusts
             self.uom['GV6'] = 105     # rain
             self.uom['GV13'] = 25     # climate conditions
             self.uom['GV14'] = 22     # cloud conditions
             self.uom['GV15'] = 116    # visibility
             self.uom['GV16'] = 71     # UV index
+            self.uom['SOLRAD'] = 74   # solar radiation
+
+            self.tag['temperature'] = 'tempF'
+            self.tag['humidity'] = 'humidity'
+            self.tag['pressure'] = 'pressureIN'
+            self.tag['windspeed'] = 'windSpeedMPH'
+            self.tag['gustspeed'] = 'windGustMPH'
+            self.tag['winddir'] = 'windDirDEG'
+            self.tag['visibility'] = 'visibilityMI'
+            self.tag['precipitation'] = 'precipIN'
+            self.tag['dewpoint'] = 'dewpointF'
+            self.tag['heatindex'] = 'heatindexF'
+            self.tag['windchill'] = 'windchillF'
+            self.tag['feelslike'] = 'feelslikeF'
+            self.tag['solarrad'] = 'solradWM2'
 
             '''
             for day in range(1,6):
