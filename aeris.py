@@ -13,7 +13,7 @@ except ImportError:
 import sys
 import time
 import datetime
-import urllib3
+import requests
 import socket
 import math
 import re
@@ -106,7 +106,7 @@ class Controller(polyinterface.Controller):
 
         # Do an initial query to get filled in as soon as possible
         self.query_conditions()
-        #self.query_forecast()
+        self.query_forecast()
 
     def longPoll(self):
         LOGGER.info('longpoll')
@@ -153,14 +153,11 @@ class Controller(polyinterface.Controller):
             LOGGER.info('Skipping connection because we aren\'t configured yet.')
             return
 
-        http = urllib3.PoolManager()
-        c = http.request('GET', request)
-        wdata = c.data
-        jdata = json.loads(wdata.decode('utf-8'))
+        c = requests.get(request)
+        jdata = c.json()
         c.close()
         LOGGER.debug(jdata)
 
-        http.clear()
         # Should we check that jdata actually has something in it?
         if jdata == None:
             LOGGER.error('Current condition query returned no data')
@@ -254,14 +251,12 @@ class Controller(polyinterface.Controller):
             LOGGER.info('Skipping connection because we aren\'t configured yet.')
             return
 
-        http = urllib3.PoolManager()
-        c = http.request('GET', request)
-        wdata = c.data
+        c = requests.get(request)
+        jdata = c.json()
         c.close()
-        http.clear()
 
-        jdata = json.loads(wdata.decode('utf-8'))
 
+        LOGGER.debug('------------  Forecast response --------------')
         LOGGER.debug(jdata)
 
         # Records are for each day, midnight to midnight
