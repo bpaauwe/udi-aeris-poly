@@ -16,6 +16,7 @@ LOGGER = polyinterface.LOGGER
 
 class DailyNode(polyinterface.Node):
     id = 'daily'
+    # TODO: add wind speed min/max, pop, winddir min/max
     drivers = [
             {'driver': 'GV19', 'value': 0, 'uom': 25},     # day of week
             {'driver': 'GV0', 'value': 0, 'uom': 4},       # high temp
@@ -25,6 +26,10 @@ class DailyNode(polyinterface.Node):
             {'driver': 'GV13', 'value': 0, 'uom': 25},     # conditions
             {'driver': 'GV14', 'value': 0, 'uom': 22},     # clouds
             {'driver': 'GV4', 'value': 0, 'uom': 49},      # wind speed
+            {'driver': 'GV5', 'value': 0, 'uom': 49},      # wind speed max
+            {'driver': 'GV6', 'value': 0, 'uom': 49},      # wind speed min
+            {'driver': 'GV7', 'value': 0, 'uom': 49},      # gust speed
+            {'driver': 'GV10', 'value': 0, 'uom': 22},     # pop
             {'driver': 'GV16', 'value': 0, 'uom': 71},     # UV index
             {'driver': 'GV20', 'value': 0, 'uom': 106},    # mm/day
             ]
@@ -36,8 +41,12 @@ class DailyNode(polyinterface.Node):
             'GV13': 25,
             'GV14': 22,
             'GV4': 49,
+            'GV5': 49,
+            'GV6': 49,
+            'GV7': 49,
             'GV16': 71,
             'GV20': 107,
+            'GV10': 22,
             }
 
     def set_driver_uom(self, units):
@@ -47,50 +56,50 @@ class DailyNode(polyinterface.Node):
             self.uom['GV1'] = 4
             self.uom['GV19'] = 25
             self.uom['GV4'] = 49
+            self.uom['GV5'] = 49
+            self.uom['GV6'] = 49
+            self.uom['GV7'] = 49
+            self.uom['GV20'] = 107
         elif units == 'imperial':
-            self.uom['BARPRES'] = 118
+            self.uom['BARPRES'] = 117
             self.uom['GV0'] = 17
             self.uom['GV1'] = 17
             self.uom['GV19'] = 25
             self.uom['GV4'] = 48
-
-    def set_units(self, units):
-        try:
-            for driver in self.drivers:
-                if units == 'imperial':
-                    if driver['driver'] == 'BARPRES': driver['uom'] = 118
-                    if driver['driver'] == 'GV0': driver['uom'] = 17
-                    if driver['driver'] == 'GV1': driver['uom'] = 17
-                    if driver['driver'] == 'GV19': driver['uom'] = 25
-                    if driver['driver'] == 'GV4': driver['uom'] = 48
-                elif units == 'metric':
-                    if driver['driver'] == 'BARPRES': driver['uom'] = 118
-                    if driver['driver'] == 'GV0': driver['uom'] = 4
-                    if driver['driver'] == 'GV1': driver['uom'] = 4
-                    if driver['driver'] == 'GV19': driver['uom'] = 25
-                    if driver['driver'] == 'GV4': driver['uom'] = 49
-        except:
-            for drv in self.drivers:
-                if units == 'imperial':
-                    if drv == 'BARPRES': self.drivers[drv]['uom'] = 118
-                    if drv == 'GV0': self.drivers[drv]['uom'] = 17
-                    if drv == 'GV1': self.drivers[drv]['uom'] = 17
-                    if drv == 'GV19': self.drivers[drv]['uom'] = 25
-                    if drv == 'GV4': self.drivers[drv]['uom'] = 48
-                elif units == 'metric':
-                    if drv == 'BARPRES': self.drivers[drv]['uom'] = 118
-                    if drv == 'GV0': self.drivers[drv]['uom'] = 4
-                    if drv == 'GV1': self.drivers[drv]['uom'] = 4
-                    if drv == 'GV19': self.drivers[drv]['uom'] = 25
-                    if drv == 'GV4': self.drivers[drv]['uom'] = 49
+            self.uom['GV5'] = 48
+            self.uom['GV6'] = 48
+            self.uom['GV7'] = 48
+            self.uom['GV20'] = 106
 
 
     def mm2inch(self, mm):
         return mm/25.4
 
+
+    '''
+        self.fcast['temp_max']
+        self.fcast['temp_min']
+        self.fcast['Hmax']
+        self.fcast['Hmin']
+        self.fcast['pressure']
+        self.fcast['speed']
+        self.fcast['speed_max']
+        self.fcast['speed_min']
+        self.fcast['gust']
+        self.fcast['gust_max']
+        self.fcast['gust_min']
+        self.fcast['dir']
+        self.fcast['dir_max']
+        self.fcast['dir_min']
+        self.fcast['timestamp']
+        self.fcast['pop']
+        self.fcast['precip']
+        self.fcast['uv']
+        self.fcast['clouds']
+    '''
     def update_forecast(self, forecast, latitude, elevation, plant_type, units):
 
-        epoch = int(forecast['dt'])
+        epoch = int(forecast['timestamp'])
         dow = time.strftime("%w", time.gmtime(epoch))
         LOGGER.info('Day of week = ' + dow)
 
@@ -101,10 +110,15 @@ class DailyNode(polyinterface.Node):
         self.setDriver('GV1', round(forecast['temp_min'], 1), True, False, self.uom['GV1'])
         self.setDriver('GV14', round(forecast['clouds'], 0), True, False, self.uom['GV14'])
         self.setDriver('GV4', round(forecast['speed'], 1), True, False, self.uom['GV4'])
+        self.setDriver('GV5', round(forecast['speed_max'], 1), True, False, self.uom['GV5'])
+        self.setDriver('GV6', round(forecast['speed_min'], 1), True, False, self.uom['GV6'])
+        self.setDriver('GV7', round(forecast['gust'], 1), True, False, self.uom['GV7'])
 
         self.setDriver('GV19', int(dow), True, False, self.uom['GV19'])
-        self.setDriver('GV13', forecast['weather'], True, False, self.uom['GV13'])
+        #self.setDriver('GV13', forecast['weather'], True, False, self.uom['GV13'])
         self.setDriver('GV16', round(forecast['uv'], 1), True, False, self.uom['GV16'])
+        self.setDriver('GV10', round(forecast['pop'], 1), True, False, self.uom['GV10'])
+        self.setDriver('GV20', round(forecast['precip'], 1), True, False, self.uom['GV20'])
 
         # Calculate ETo
         #  Temp is in degree C and windspeed is in m/s, we may need to
@@ -119,9 +133,9 @@ class DailyNode(polyinterface.Node):
             Tmin = et3.FtoC(Tmin)
             Tmax = et3.FtoC(Tmax)
             Ws = et3.mph2ms(Ws)
+        else:
+            Ws = et3.kph2ms(Ws)
 
         et0 = et3.evapotranspriation(Tmax, Tmin, None, Ws, float(elevation), forecast['Hmax'], forecast['Hmin'], latitude, float(plant_type), J)
         self.setDriver('GV20', round(et0, 2), True, False)
         LOGGER.info("ETo = %f %f" % (et0, self.mm2inch(et0)))
-
-

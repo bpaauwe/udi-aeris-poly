@@ -91,11 +91,12 @@ class Controller(polyinterface.Controller):
 
     def start(self):
         LOGGER.info('Starting node server')
-        for day in range(1,6):
+        # TODO: How many forecast days?
+        for day in range(1,14):
             address = 'forecast_' + str(day)
             title = 'Forecast ' + str(day)
             try:
-                node = owm_daily.DailyNode(self, self.address, address, title)
+                node = aeris_daily.DailyNode(self, self.address, address, title)
                 self.addNode(node)
             except:
                 LOGGER.error('Failed to create forecast node ' + title)
@@ -107,6 +108,7 @@ class Controller(polyinterface.Controller):
         # Do an initial query to get filled in as soon as possible
         self.query_conditions()
         self.query_forecast()
+        LOGGER.error('******   Startup Finished, start polling now ******')
 
     def longPoll(self):
         LOGGER.info('longpoll')
@@ -229,7 +231,7 @@ class Controller(polyinterface.Controller):
     def query_forecast(self):
         # 7 day forecast
 
-        request = 'http://api.aerisapi.com/forecast/'
+        request = 'http://api.aerisapi.com/forecasts/'
         # if location looks like a zip code, treat it as such for backwards
         # compatibility
         # TODO: handle location entries properly
@@ -244,6 +246,7 @@ class Controller(polyinterface.Controller):
         request += '&client_secret=xiZGRDGO61ZP2YZH1YDwVB6tuDMX4Zx3o9yeXDyI'
         request += '&filter=mdnt2mdnt'
         request += '&precise'
+        request += '&limit=12'
 
         LOGGER.debug('request = %s' % request)
 
@@ -261,19 +264,35 @@ class Controller(polyinterface.Controller):
 
         # Records are for each day, midnight to midnight
         day = 1
-        if 'period' in jdata['response'][0]:
+        if 'periods' in jdata['response'][0]:
             for forecast in jdata['response'][0]['periods']:
-                self.fcast['temp_max'] = forecast['maxTempC']
-                self.fcast['temp_min'] = forecast['minTempC']
-                self.fcast['Hmax'] = forecast['maxHumidity']
-                self.fcast['Hmin'] = forecast['minHumidity']
-                self.fcast['pressure'] = float(forecast['pressureMB'])
-                self.fcast['speed'] = float(forecast['windSpeedKPH'])
+                LOGGER.debug(' >>>>   period ' + forecast['dateTimeISO'])
+                #LOGGER.debug(forecast)
+                #LOGGER.debug('              ')
+                self.fcast['temp_max'] = forecast[self.tag['temp_max']]
+                self.fcast['temp_min'] = forecast[self.tag['temp_min']]
+                self.fcast['Hmax'] = forecast[self.tag['humidity_max']]
+                self.fcast['Hmin'] = forecast[self.tag['humidity_min']]
+                self.fcast['pressure'] = float(forecast[self.tag['pressure']])
+                self.fcast['speed'] = float(forecast[self.tag['windspeed']])
+                self.fcast['speed_max'] = float(forecast[self.tag['wind_max']])
+                self.fcast['speed_min'] = float(forecast[self.tag['wind_min']])
+                self.fcast['gust'] = float(forecast[self.tag['gustspeed']])
+                #self.fcast['gust_max'] = float(forecast[self.tag['gust_max']])
+                #self.fcast['gust_min'] = float(forecast[self.tag['gust_min']])
+                self.fcast['dir'] = forecast[self.tag['winddir']]
+                self.fcast['dir_max'] = forecast[self.tag['winddir_max']]
+                self.fcast['dir_min'] = forecast[self.tag['winddir_min']]
+                self.fcast['timestamp'] = forecast[self.tag['timestamp']]
+                self.fcast['pop'] = forecast[self.tag['pop']]
+                self.fcast['precip'] = float(forecast[self.tag['precipitation']])
+                self.fcast['uv'] = forecast['uvi']
+                self.fcast['clouds'] = forecast['sky']
+
                 # look at weatherPrimaryCoded and cloudsCoded and
                 # build the forecast conditions
-                self.fcast['clouds'] = forecast['cloudsCoded']
 
-                LOGGER.info(self.fcast)
+                #LOGGER.info(self.fcast)
                 # Update the forecast
                 address = 'forecast_' + str(day)
                 self.nodes[address].update_forecast(self.fcast, self.latitude, self.elevation, self.plant_type, self.units)
@@ -370,17 +389,28 @@ class Controller(polyinterface.Controller):
             self.tag['windchill'] = 'windchillC'
             self.tag['feelslike'] = 'feelslikeC'
             self.tag['solarrad'] = 'solradWM2'
+            self.tag['temp_max'] = 'maxTempC'
+            self.tag['temp_min'] = 'minTempC'
+            self.tag['humidity_max'] = 'maxHumidity'
+            self.tag['humidity_min'] = 'minHumidity'
+            self.tag['wind_max'] = 'windSpeedMaxKPH'
+            self.tag['wind_min'] = 'windSpeedMinKPH'
+            #self.tag['gust_max'] = 'windGustMaxKPH'
+            #self.tag['gust_min'] = 'windGustMinKPH'
+            self.tag['winddir_max'] = 'windDirMaxDEG'
+            self.tag['winddir_min'] = 'windDirMinDEG'
+            self.tag['pop'] = 'pop'
+            self.tag['timestamp'] = 'timestamp'
 
-            '''
-            for day in range(1,6):
+
+            for day in range(1,12):
                 address = 'forecast_' + str(day)
                 self.nodes[address].set_driver_uom('metric')
-            '''
         else:
             self.uom['ST'] = 2   # node server status
             self.uom['CLITEMP'] = 17  # temperature
             self.uom['CLIHUM'] = 22   # humidity
-            self.uom['BARPRES'] = 118 # pressure
+            self.uom['BARPRES'] = 117 # pressure
             self.uom['WINDDIR'] = 76  # direction
             self.uom['DEWPOINT'] = 17 # dew point
             self.uom['GV0'] = 17      # max temp
@@ -408,12 +438,22 @@ class Controller(polyinterface.Controller):
             self.tag['windchill'] = 'windchillF'
             self.tag['feelslike'] = 'feelslikeF'
             self.tag['solarrad'] = 'solradWM2'
+            self.tag['temp_max'] = 'maxTempF'
+            self.tag['temp_min'] = 'minTempF'
+            self.tag['humidity_max'] = 'maxHumidity'
+            self.tag['humidity_min'] = 'minHumidity'
+            self.tag['wind_max'] = 'windSpeedMaxMPH'
+            self.tag['wind_min'] = 'windSpeedMinMPH'
+            #self.tag['gust_max'] = 'windGustMaxMPH'
+            #self.tag['gust_min'] = 'windGustMinMPH'
+            self.tag['winddir_max'] = 'windDirMaxDEG'
+            self.tag['winddir_min'] = 'windDirMinDEG'
+            self.tag['pop'] = 'pop'
+            self.tag['timestamp'] = 'timestamp'
 
-            '''
-            for day in range(1,6):
+            for day in range(1,12):
                 address = 'forecast_' + str(day)
                 self.nodes[address].set_driver_uom('imperial')
-            '''
 
     def remove_notices_all(self, command):
         self.removeNoticesAll()
