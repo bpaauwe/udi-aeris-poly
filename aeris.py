@@ -361,7 +361,7 @@ class Controller(polyinterface.Controller):
             self.uom['ST'] = 2   # node server status
             self.uom['CLITEMP'] = 4   # temperature
             self.uom['CLIHUM'] = 22   # humidity
-            self.uom['BARPRES'] = 118 # pressure
+            self.uom['BARPRES'] = 117 # pressure
             self.uom['WINDDIR'] = 76  # direction
             self.uom['DEWPOINT'] = 4  # dew point
             self.uom['GV0'] = 4       # max temp
@@ -410,7 +410,7 @@ class Controller(polyinterface.Controller):
             self.uom['ST'] = 2   # node server status
             self.uom['CLITEMP'] = 17  # temperature
             self.uom['CLIHUM'] = 22   # humidity
-            self.uom['BARPRES'] = 117 # pressure
+            self.uom['BARPRES'] = 23  # pressure
             self.uom['WINDDIR'] = 76  # direction
             self.uom['DEWPOINT'] = 17 # dew point
             self.uom['GV0'] = 17      # max temp
@@ -542,7 +542,7 @@ class Controller(polyinterface.Controller):
             {'driver': 'CLITEMP', 'value': 0, 'uom': 4},   # temperature
             {'driver': 'CLIHUM', 'value': 0, 'uom': 22},   # humidity
             {'driver': 'DEWPT', 'value': 0, 'uom': 4},     # dewpoint
-            {'driver': 'BARPRES', 'value': 0, 'uom': 118}, # pressure
+            {'driver': 'BARPRES', 'value': 0, 'uom': 117}, # pressure
             {'driver': 'WINDDIR', 'value': 0, 'uom': 76},  # direction
             {'driver': 'GV4', 'value': 0, 'uom': 49},      # wind speed
             {'driver': 'GV5', 'value': 0, 'uom': 49},      # gust speed

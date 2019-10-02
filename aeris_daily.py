@@ -22,14 +22,15 @@ class DailyNode(polyinterface.Node):
             {'driver': 'GV0', 'value': 0, 'uom': 4},       # high temp
             {'driver': 'GV1', 'value': 0, 'uom': 4},       # low temp
             {'driver': 'CLIHUM', 'value': 0, 'uom': 22},   # humidity
-            {'driver': 'BARPRES', 'value': 0, 'uom': 118}, # pressure
+            {'driver': 'BARPRES', 'value': 0, 'uom': 117}, # pressure
             {'driver': 'GV13', 'value': 0, 'uom': 25},     # conditions
             {'driver': 'GV14', 'value': 0, 'uom': 22},     # clouds
             {'driver': 'GV4', 'value': 0, 'uom': 49},      # wind speed
-            {'driver': 'GV5', 'value': 0, 'uom': 49},      # wind speed max
-            {'driver': 'GV6', 'value': 0, 'uom': 49},      # wind speed min
-            {'driver': 'GV7', 'value': 0, 'uom': 49},      # gust speed
-            {'driver': 'GV10', 'value': 0, 'uom': 22},     # pop
+            {'driver': 'GV5', 'value': 0, 'uom': 49},      # gust speed
+            {'driver': 'GV6', 'value': 0, 'uom': 105},     # precipitation
+            {'driver': 'GV7', 'value': 0, 'uom': 49},      # wind speed max
+            {'driver': 'GV8', 'value': 0, 'uom': 49},      # wind speed min
+            {'driver': 'GV18', 'value': 0, 'uom': 22},     # pop
             {'driver': 'GV16', 'value': 0, 'uom': 71},     # UV index
             {'driver': 'GV20', 'value': 0, 'uom': 106},    # mm/day
             ]
@@ -37,38 +38,41 @@ class DailyNode(polyinterface.Node):
             'GV0': 4,
             'GV1': 4,
             'CLIHUM': 22,
-            'BARPRES': 118,
+            'BARPRES': 117,
             'GV13': 25,
             'GV14': 22,
             'GV4': 49,
             'GV5': 49,
-            'GV6': 49,
+            'GV6': 105,
             'GV7': 49,
+            'GV8': 49,
             'GV16': 71,
             'GV20': 107,
-            'GV10': 22,
+            'GV18': 22,
             }
 
     def set_driver_uom(self, units):
         if units == 'metric':
-            self.uom['BARPRES'] = 118
+            self.uom['BARPRES'] = 117
             self.uom['GV0'] = 4
             self.uom['GV1'] = 4
             self.uom['GV19'] = 25
             self.uom['GV4'] = 49
             self.uom['GV5'] = 49
-            self.uom['GV6'] = 49
+            self.uom['GV6'] = 105
             self.uom['GV7'] = 49
+            self.uom['GV8'] = 49
             self.uom['GV20'] = 107
         elif units == 'imperial':
-            self.uom['BARPRES'] = 117
+            self.uom['BARPRES'] = 23
             self.uom['GV0'] = 17
             self.uom['GV1'] = 17
             self.uom['GV19'] = 25
             self.uom['GV4'] = 48
             self.uom['GV5'] = 48
-            self.uom['GV6'] = 48
+            self.uom['GV6'] = 82
             self.uom['GV7'] = 48
+            self.uom['GV8'] = 48
             self.uom['GV20'] = 106
 
 
@@ -110,15 +114,15 @@ class DailyNode(polyinterface.Node):
         self.setDriver('GV1', round(forecast['temp_min'], 1), True, False, self.uom['GV1'])
         self.setDriver('GV14', round(forecast['clouds'], 0), True, False, self.uom['GV14'])
         self.setDriver('GV4', round(forecast['speed'], 1), True, False, self.uom['GV4'])
-        self.setDriver('GV5', round(forecast['speed_max'], 1), True, False, self.uom['GV5'])
-        self.setDriver('GV6', round(forecast['speed_min'], 1), True, False, self.uom['GV6'])
-        self.setDriver('GV7', round(forecast['gust'], 1), True, False, self.uom['GV7'])
+        self.setDriver('GV5', round(forecast['gust'], 1), True, False, self.uom['GV5'])
+        self.setDriver('GV6', round(forecast['precip'], 1), True, False, self.uom['GV6'])
+        self.setDriver('GV7', round(forecast['speed_max'], 1), True, False, self.uom['GV7'])
+        self.setDriver('GV8', round(forecast['speed_min'], 1), True, False, self.uom['GV8'])
 
         self.setDriver('GV19', int(dow), True, False, self.uom['GV19'])
         #self.setDriver('GV13', forecast['weather'], True, False, self.uom['GV13'])
         self.setDriver('GV16', round(forecast['uv'], 1), True, False, self.uom['GV16'])
-        self.setDriver('GV10', round(forecast['pop'], 1), True, False, self.uom['GV10'])
-        self.setDriver('GV20', round(forecast['precip'], 1), True, False, self.uom['GV20'])
+        self.setDriver('GV18', round(forecast['pop'], 1), True, False, self.uom['GV18'])
 
         # Calculate ETo
         #  Temp is in degree C and windspeed is in m/s, we may need to
