@@ -27,7 +27,7 @@ class DailyNode(polyinterface.Node):
             {'driver': 'GV14', 'value': 0, 'uom': 22},     # clouds
             {'driver': 'GV4', 'value': 0, 'uom': 49},      # wind speed
             {'driver': 'GV5', 'value': 0, 'uom': 49},      # gust speed
-            {'driver': 'GV6', 'value': 0, 'uom': 105},     # precipitation
+            {'driver': 'GV6', 'value': 0, 'uom': 82},      # precipitation
             {'driver': 'GV7', 'value': 0, 'uom': 49},      # wind speed max
             {'driver': 'GV8', 'value': 0, 'uom': 49},      # wind speed min
             {'driver': 'GV18', 'value': 0, 'uom': 22},     # pop
@@ -43,7 +43,7 @@ class DailyNode(polyinterface.Node):
             'GV14': 22,
             'GV4': 49,
             'GV5': 49,
-            'GV6': 105,
+            'GV6': 82,
             'GV7': 49,
             'GV8': 49,
             'GV16': 71,
@@ -59,7 +59,7 @@ class DailyNode(polyinterface.Node):
             self.uom['GV19'] = 25
             self.uom['GV4'] = 49
             self.uom['GV5'] = 49
-            self.uom['GV6'] = 105
+            self.uom['GV6'] = 82
             self.uom['GV7'] = 49
             self.uom['GV8'] = 49
             self.uom['GV20'] = 107
@@ -70,7 +70,7 @@ class DailyNode(polyinterface.Node):
             self.uom['GV19'] = 25
             self.uom['GV4'] = 48
             self.uom['GV5'] = 48
-            self.uom['GV6'] = 82
+            self.uom['GV6'] = 105
             self.uom['GV7'] = 48
             self.uom['GV8'] = 48
             self.uom['GV20'] = 106
