@@ -11,7 +11,9 @@
       <st id="GV4" editor="SPEED" />
       <st id="GV5" editor="SPEED" />
       <st id="GV15" editor="DISTANCE" />
-      <st id="GV13" editor="CONDITIONS" />
+      <st id="GV11" editor="COVERAGE" />
+      <st id="GV12" editor="INTENSITY" />
+      <st id="GV13" editor="WEATHER" />
       <st id="GV14" editor="PERCENT" />
       <st id="GV0" editor="TEMERATURE" />
       <st id="GV1" editor="TEMERATURE" />
@@ -38,7 +40,9 @@
       <st id="GV1" editor="TEMPERATURE" />
       <st id="CLIHUM" editor="PERCENT" />
       <st id="BARPRES" editor="PRESSURE" />
-      <st id="GV13" editor="CONDITIONS" />
+      <st id="GV11" editor="COVERAGE" />
+      <st id="GV12" editor="INTENSITY" />
+      <st id="GV13" editor="WEATHER" />
       <st id="GV14" editor="PERCENT" />
       <st id="GV4" editor="SPEED" />
       <st id="GV5" editor="SPEED" />

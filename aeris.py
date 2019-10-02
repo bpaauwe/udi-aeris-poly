@@ -200,8 +200,16 @@ class Controller(polyinterface.Controller):
         #  ob['weatherCoded']
         #    [coverage] : [intensity] : [weather]
         #     -- these can be mapped to strings
+
+        LOGGER.debug('**>>> WeatherCoded = ' + ob['weatherCoded']);
+        weather = ob['weatherCoded'].split(':')[0]
+        self.update_driver('GV11', self.coverage_codes(weather), self.uom['GV11'])
+        weather = ob['weatherCoded'].split(':')[1]
+        self.update_driver('GV12', self.intensity_codes(weather), self.uom['GV12'])
         weather = ob['weatherCoded'].split(':')[2]
+        LOGGER.debug('>>>  weather = ' + weather)
         self.update_driver('GV13', self.weather_codes(weather), self.uom['GV13'])
+        LOGGER.debug('>>>  Setting GV13 to ' + str(self.weather_codes(weather)))
 
         # cloud cover
         #  ob['cloudsCoded'] ??
@@ -214,18 +222,6 @@ class Controller(polyinterface.Controller):
            - snow depth
            - ceiling
            - light
-        '''
-
-
-        '''
-        self.update_driver('GV0', jdata['main']['temp_max'], self.uom['GV0'])
-        self.update_driver('GV1', jdata['main']['temp_min'], self.uom['GV1'])
-        if 'clouds' in jdata:
-            self.update_driver('GV14', jdata['clouds']['all'], self.uom['GV14'])
-        if 'weather' in jdata:
-            self.update_driver('GV13', jdata['weather'][0]['id'], self.uom['GV13'])
-        
-        self.update_driver('GV16', uv_data['value'], self.uom['GV16'])
         '''
 
     def query_forecast(self):
@@ -288,6 +284,13 @@ class Controller(polyinterface.Controller):
                 self.fcast['precip'] = float(forecast[self.tag['precipitation']])
                 self.fcast['uv'] = forecast['uvi']
                 self.fcast['clouds'] = forecast['sky']
+
+                LOGGER.debug('**>>>>> weatherCoded = ' + forecast['weatherPrimaryCoded'])
+                self.fcast['coverage'] = self.coverage_codes(forecast['weatherPrimaryCoded'].split(':')[0])
+                self.fcast['intensity'] = self.intensity_codes(forecast['weatherPrimaryCoded'].split(':')[1])
+                self.fcast['weather'] = self.weather_codes(forecast['weatherPrimaryCoded'].split(':')[2])
+                LOGGER.debug('>>>  weather = ' + forecast['weatherPrimaryCoded'].split(':')[2])
+                LOGGER.debug('>>>  code = ' + str(self.weather_codes(forecast['weatherPrimaryCoded'].split(':')[2])))
 
                 # look at weatherPrimaryCoded and cloudsCoded and
                 # build the forecast conditions
@@ -370,6 +373,8 @@ class Controller(polyinterface.Controller):
             self.uom['GV4'] = 49      # wind speed
             self.uom['GV5'] = 49      # wind gusts
             self.uom['GV6'] = 82      # rain
+            self.uom['GV11'] = 25     # climate coverage
+            self.uom['GV12'] = 25     # climate intensity
             self.uom['GV13'] = 25     # climate conditions
             self.uom['GV14'] = 22     # cloud conditions
             self.uom['GV15'] = 83     # visibility
@@ -419,6 +424,8 @@ class Controller(polyinterface.Controller):
             self.uom['GV4'] = 48      # wind speed
             self.uom['GV5'] = 48      # wind gusts
             self.uom['GV6'] = 105     # rain
+            self.uom['GV11'] = 25     # climate coverage
+            self.uom['GV12'] = 25     # climate intensity
             self.uom['GV13'] = 25     # climate conditions
             self.uom['GV14'] = 22     # cloud conditions
             self.uom['GV15'] = 116    # visibility
@@ -489,6 +496,11 @@ class Controller(polyinterface.Controller):
                 'ZL': 26, # freezing drizzle
                 'ZR': 27, # freezing rain
                 'ZY': 28, # freezing spray
+                'CL': 29, # Clear
+                'FW': 30, # Fair/Mostly sunny
+                'SC': 31, # Partly cloudy
+                'BK': 32, # Mostly cloudy
+                'OV': 33, # Cloudy/Overcast
                 }
 
         if code in code_map:
@@ -528,6 +540,7 @@ class Controller(polyinterface.Controller):
                 }
         if code in code_map:
             return code_map[code]
+        return 16
 
 
     commands = {
@@ -550,6 +563,8 @@ class Controller(polyinterface.Controller):
             {'driver': 'GV1', 'value': 0, 'uom': 4},       # wind chill
             {'driver': 'GV2', 'value': 0, 'uom': 4},       # feels like
             {'driver': 'GV6', 'value': 0, 'uom': 82},      # rain
+            {'driver': 'GV11', 'value': 0, 'uom': 25},     # climate coverage
+            {'driver': 'GV12', 'value': 0, 'uom': 25},     # climate intensity
             {'driver': 'GV13', 'value': 0, 'uom': 25},     # climate conditions
             {'driver': 'GV14', 'value': 0, 'uom': 22},     # cloud conditions
             {'driver': 'GV15', 'value': 0, 'uom': 83},     # visibility

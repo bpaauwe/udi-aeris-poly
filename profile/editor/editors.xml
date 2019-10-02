@@ -32,14 +32,17 @@
     <editor id="METERS">
         <range uom="38" min="0" max="200000" prec="0" />
     </editor>
-    <editor id="COVERAGE">
-        <range uom="27" min="0" max="200000" prec="0" />
-    </editor>
     <editor id="CONDITIONS">
 	    <range uom="25" subset="200,202,210-212,221,230-232,300-302,310-314,321,500-504,511,520-522,531,600-602,611,612,615,616,620-622,701,711,721,731,741,751,761,762,771,781,800-804" nls="EN_CCCONDITION" />
     </editor>
     <editor id="INTENSITY">
-        <range uom="70" min="0" max="100" prec="0" />
+        <range uom="25" min="0" max="4" nls="EN_INTENSITY" />
+    </editor>
+    <editor id="WEATHER">
+        <range uom="25" min="0" max="33" nls="EN_WEATHER" />
+    </editor>
+    <editor id="COVERAGE">
+        <range uom="25" min="0" max="16" nls="EN_COVERAGE" />
     </editor>
     <editor id="PRESSURE">
         <range uom="23" min="0" max="100" prec="0" />

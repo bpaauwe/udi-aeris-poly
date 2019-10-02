@@ -23,7 +23,9 @@ class DailyNode(polyinterface.Node):
             {'driver': 'GV1', 'value': 0, 'uom': 4},       # low temp
             {'driver': 'CLIHUM', 'value': 0, 'uom': 22},   # humidity
             {'driver': 'BARPRES', 'value': 0, 'uom': 117}, # pressure
-            {'driver': 'GV13', 'value': 0, 'uom': 25},     # conditions
+            {'driver': 'GV11', 'value': 0, 'uom': 25},     # coverage
+            {'driver': 'GV12', 'value': 0, 'uom': 25},     # intensity
+            {'driver': 'GV13', 'value': 0, 'uom': 25},     # weather
             {'driver': 'GV14', 'value': 0, 'uom': 22},     # clouds
             {'driver': 'GV4', 'value': 0, 'uom': 49},      # wind speed
             {'driver': 'GV5', 'value': 0, 'uom': 49},      # gust speed
@@ -39,6 +41,8 @@ class DailyNode(polyinterface.Node):
             'GV1': 4,
             'CLIHUM': 22,
             'BARPRES': 117,
+            'GV11': 25,
+            'GV12': 25,
             'GV13': 25,
             'GV14': 22,
             'GV4': 49,
@@ -120,9 +124,11 @@ class DailyNode(polyinterface.Node):
         self.setDriver('GV8', round(forecast['speed_min'], 1), True, False, self.uom['GV8'])
 
         self.setDriver('GV19', int(dow), True, False, self.uom['GV19'])
-        #self.setDriver('GV13', forecast['weather'], True, False, self.uom['GV13'])
         self.setDriver('GV16', round(forecast['uv'], 1), True, False, self.uom['GV16'])
         self.setDriver('GV18', round(forecast['pop'], 1), True, False, self.uom['GV18'])
+        self.setDriver('GV11', forecast['coverage'], True, False, self.uom['GV11'])
+        self.setDriver('GV12', forecast['intensity'], True, False, self.uom['GV12'])
+        self.setDriver('GV13', forecast['weather'], True, False, self.uom['GV13'])
 
         # Calculate ETo
         #  Temp is in degree C and windspeed is in m/s, we may need to
