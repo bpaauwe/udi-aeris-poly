@@ -10,7 +10,7 @@
       <st id="WINDDIR" editor="DEGREES" />
       <st id="GV4" editor="SPEED" />
       <st id="GV5" editor="SPEED" />
-      <st id="GV15" editor="DISTANCE" />
+      <st id="DISTANC" editor="DISTANCE" />
       <st id="GV11" editor="COVERAGE" />
       <st id="GV12" editor="INTENSITY" />
       <st id="GV13" editor="WEATHER" />
@@ -20,7 +20,7 @@
       <st id="GV2" editor="TEMERATURE" />
       <st id="GV6" editor="RAIN" />
       <st id="SOLRAD" editor="SOLARRAD" />
-      <st id="GV10" editor="DISTANCE" />
+      <st id="UV" editor="UV" />
     </sts>
     <cmds>
       <sends />
@@ -28,6 +28,9 @@
         <cmd id="DISCOVER" />
         <cmd id="REMOVE_NOTICES_ALL" />
         <cmd id="UPDATE_PROFILE" />
+		<cmd id="DEBUG">
+			<p id="" editor="DEBUG"/>
+		</cmd>
       </accepts>
     </cmds>
   </nodeDef>

@@ -39,7 +39,7 @@ def get_uom(units):
             'GV12': 25,     # climate intensity
             'GV13': 25,     # climate conditions
             'GV14': 22,     # cloud conditions
-            'DISTANC': 38,  # visibility
+            'DISTANC': 83,  # visibility (kilometers)
             'UV': 71,       # UV index
             'GV17': 56,     # Air Quality
             'GV18': 22,     # chance of precipitation
@@ -83,7 +83,7 @@ def get_uom(units):
             'ST': 2,   # node server status
             'CLITEMP': 17,  # temperature
             'CLIHUM': 22,   # humidity
-            'BARPRES': 117, # pressure (always mb)
+            'BARPRES': 23,  # pressure
             'WINDDIR': 76,  # direction
             'DEWPT': 17,    # dew point
             'SOLRAD': 74,   # solar radiation

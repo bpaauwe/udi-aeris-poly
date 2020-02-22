@@ -168,6 +168,7 @@ class Controller(polyinterface.Controller):
             self.tag['humdity_max'] = 'maxHumidity'
             self.tag['wind_min'] = 'windSpeedMinKPH'
             self.tag['wind_max'] = 'windSpeedMaxKPH'
+            self.tag['uv'] = 'uvi'
         else:
             self.tag['temperature'] = 'tempF'
             self.tag['humidity'] = 'humidity'
@@ -189,6 +190,7 @@ class Controller(polyinterface.Controller):
             self.tag['humdity_max'] = 'maxHumidity'
             self.tag['wind_min'] = 'windSpeedMinMPH'
             self.tag['wind_max'] = 'windSpeedMaxMPH'
+            self.tag['uv'] = 'uvi'
 
     def query_conditions(self):
         # Query for the current conditions. We can do this fairly
@@ -216,7 +218,7 @@ class Controller(polyinterface.Controller):
                 return
             if 'ob' not in jdata['response']:
                 LOGGER.error('No observation object in query response.')
-             return
+                return
 
             ob = jdata['response']['ob']
 
@@ -226,13 +228,14 @@ class Controller(polyinterface.Controller):
             self.update_driver('GV4', ob[self.tag['windspeed']])
             self.update_driver('GV5', ob[self.tag['gustspeed']])
             self.update_driver('WINDDIR', ob[self.tag['winddir']])
-            self.update_driver('GV15', ob[self.tag['visibility']])
+            self.update_driver('DISTANC', ob[self.tag['visibility']])
             self.update_driver('GV6', ob[self.tag['precipitation']])
             self.update_driver('DEWPT', ob[self.tag['dewpoint']])
             self.update_driver('GV0', ob[self.tag['heatindex']])
             self.update_driver('GV1', ob[self.tag['windchill']])
             self.update_driver('GV2', ob[self.tag['feelslike']])
             self.update_driver('SOLRAD', ob[self.tag['solarrad']])
+            self.update_driver('UV', ob[self.tag['uv']])
             # Weather conditions:
             #  ob['weather']
             #  ob['weatherShort']
@@ -256,12 +259,14 @@ class Controller(polyinterface.Controller):
 
             '''
             TODO:
-            - altimeter?
+            - Add UV index
             - weather
             - snow depth
             - ceiling
             - light
             '''
+        except:
+            LOGGER.error('Current observation update failure')
 
     def query_forecast(self):
         if not self.configured:
@@ -309,6 +314,8 @@ class Controller(polyinterface.Controller):
             for f in range(0,int(self.params.get('Forecast Days'))):
                 address = 'forecast_' + str(f)
                 self.nodes[address].update_forecast(fcast[f], self.latitude, self.params.get('Elevation'), self.params.get('Plant Type'), self.params.get('Units'))
+        except:
+            LOGGER.error('Forecast data failure')
 
 
     def query(self):
@@ -476,7 +483,7 @@ class Controller(polyinterface.Controller):
 
     commands = {
             'UPDATE_PROFILE': update_profile,
-            'REMOVE_NOTICES_ALL': remove_notices_all
+            'REMOVE_NOTICES_ALL': remove_notices_all,
             'DEBUG': set_logging_level,
             }
 
@@ -499,8 +506,9 @@ class Controller(polyinterface.Controller):
             {'driver': 'GV12', 'value': 0, 'uom': 25},     # climate intensity
             {'driver': 'GV13', 'value': 0, 'uom': 25},     # climate conditions
             {'driver': 'GV14', 'value': 0, 'uom': 22},     # cloud conditions
-            {'driver': 'GV15', 'value': 0, 'uom': 83},     # visibility
-            {'driver': 'SOLRAD', 'value': 0, 'uom': 71},   # solar radiataion
+            {'driver': 'DISTANC', 'value': 0, 'uom': 83},  # visibility
+            {'driver': 'SOLRAD', 'value': 0, 'uom': 74},   # solar radiataion
+            {'driver': 'UV', 'value': 0, 'uom': 71},       # uv index
             ]
 
 
