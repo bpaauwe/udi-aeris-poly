@@ -1,20 +1,20 @@
 {
     "name": "AERIS Weather",
-    "docs": "http;//www.bobsplace.com/",
+    "docs": "https://github.com/bpaauwe/udi-aeris-poly",
     "type": "python3",
     "executable": "aeris.py",
     "install": "install.sh",
     "install_cloud": "install_cloud.sh",
     "description": "Add weather data to the ISY994",
-    "notice": "For testing purposes only",
-    "shortPoll": "60",
+    "notice": "",
+    "shortPoll": "120",
     "longPoll": "600",
-    "profile_version": "0.0.1",
+    "profile_version": "1.0.0",
     "credits": [ {
 	"title": "AERIS Weather: A node server for weather data",
     	"author": "Bob Paauwe",
-    	"version": "0.0.1",
-    	"date": "August 20, 2019",
+    	"version": "1.0.0",
+    	"date": "March 18, 2020",
     	"source": "https://github.com/bpaauwe/udi-aeris-poly",
 	"license": "https://github.com/bpaauwe/udi-aeris-poly/LICENSE"
 	} ]
