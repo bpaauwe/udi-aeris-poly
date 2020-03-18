@@ -30,6 +30,8 @@ def add_functions_as_methods(functions):
 # value exist first.
 def update_driver(self, driver, value, force=False, prec=3):
     try:
+        if value == None or value == "None":
+            value = "0"
         self.setDriver(driver, round(float(value), prec), True, force, self.uom[driver])
         LOGGER.debug('setDriver (%s, %f)' %(driver, float(value)))
     except:

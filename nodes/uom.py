@@ -27,12 +27,13 @@ def get_uom(units):
             'GV0': 4,       # max temp
             'GV1': 4,       # min temp
             'GV2': 4,       # ??feels like
-            'GV3': 4,       # ??feels like
-            'GV4': 49,      # wind speed
+            'GV3': 4,       # heat index  
+            'GV4': 4,       # wind chill
+            'SPEED': 49,    # wind speed
             'GV5': 49,      # wind gusts
             'GV6': 82,      # rain
-            'GV7': 82,      # snow
-            'GV8': 82,      # snow depth
+            'GV7': 49,      # wind max
+            'GV8': 49,      # wind min  
             'GV9': 56,      # moon phase
             'GV10': 56,     # ozone
             'GV11': 25,     # climate coverage
@@ -44,7 +45,7 @@ def get_uom(units):
             'GV17': 56,     # Air Quality
             'GV18': 22,     # chance of precipitation
             'GV19': 25,     # day of week
-            'GV20': 107,    # ETo
+            'GV20': 106,    # ETo
         }
     elif unit_cfg == 'uk':
         uom = {
@@ -60,11 +61,12 @@ def get_uom(units):
             'GV1': 4,       # min temp
             'GV2': 4,       # feels like
             'GV3': 4,       # ??feels like
-            'GV4': 48,      # wind speed
+            'GV4': 4,       # wind chill
+            'SPEED': 48,    # wind speed
             'GV5': 48,      # wind gusts
             'GV6': 105,     # rain
-            'GV7': 82,      # snow
-            'GV8': 82,      # snow depth
+            'GV7': 48,      # max wind
+            'GV8': 48,      # min wind  
             'GV9': 56,      # moon phase
             'GV10': 56,     # ozone
             'GV11': 25,     # climate coverage
@@ -76,7 +78,7 @@ def get_uom(units):
             'GV17': 56,     # Air Quality
             'GV18': 22,     # chance of precipitation
             'GV19': 25,     # day of week
-            'GV20': 107,    # ETo
+            'GV20': 120,    # ETo
         }
     else:
         uom = {
@@ -92,11 +94,12 @@ def get_uom(units):
             'GV1': 17,      # min temp
             'GV2': 17,      # feels like
             'GV3': 17,      # ??feels like
-            'GV4': 48,      # wind speed
+            'GV4': 17,      # wind chill
+            'SPEED': 48,    # wind speed
             'GV5': 48,      # wind gusts
             'GV6': 105,     # rain
-            'GV7': 105,     # snow
-            'GV8': 105,     # snow depth
+            'GV7': 48,      # max wind
+            'GV8': 48,      # min wind   
             'GV9': 56,      # moon phase
             'GV10': 56,     # ozone
             'GV11': 25,     # climate coverage
@@ -108,7 +111,7 @@ def get_uom(units):
             'GV17': 56,     # Air Quality
             'GV18': 22,     # chance of precipitation
             'GV19': 25,     # day of week
-            'GV20': 106,    # ETo
+            'GV20': 120,    # ETo
         }
 
     return uom

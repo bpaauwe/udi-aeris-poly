@@ -66,7 +66,7 @@
         <range uom="83"  min="0" max="10000" prec="1" />
     </editor>
 	<editor id="DEBUG">
-		range uom="25" subset="0,10,20,30,40,50" NLS="DBG" />
+		<range uom="25" subset="0,10,20,30,40,50" NLS="DBG" />
 	</editor>
 
 </editors>
