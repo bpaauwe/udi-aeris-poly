@@ -1,5 +1,5 @@
 {
-    "name": "AERIS Weather",
+    "name": "AERISWeather",
     "docs": "https://github.com/bpaauwe/udi-aeris-poly",
     "type": "python3",
     "executable": "aeris.py",
