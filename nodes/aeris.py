@@ -293,7 +293,7 @@ class Controller(polyinterface.Controller):
             # Records are for each day, midnight to midnight
             day = 0
             if 'periods' in jdata['response'][0]:
-                LOGGER.debug('Processing period for day ' + str(day))
+                LOGGER.debug('Processing periods: %d' % len(jdata['response'][0]['periods']))
                 for forecast in jdata['response'][0]['periods']:
                     address = 'forecast_' + str(day)
                     LOGGER.debug(' >>>>   period ' + forecast['dateTimeISO'] + '  ' + address)
@@ -352,9 +352,9 @@ class Controller(polyinterface.Controller):
         if self.params.get_from_polyglot(self):
             LOGGER.debug('All required parameters are set!')
             self.configured = True
-            if int(self.params.get('Forecast Days')) > 14:
-                addNotice('Number of days of forecast data is limited to 14 days', 'forecast')
-                self.params.set('Forecast Days', 14)
+            if int(self.params.get('Forecast Days')) > 12:
+                addNotice('Number of days of forecast data is limited to 12 days', 'forecast')
+                self.params.set('Forecast Days', 12)
         else:
             LOGGER.debug('Configuration required.')
             LOGGER.debug('ClientID = ' + self.params.get('ClientID'))

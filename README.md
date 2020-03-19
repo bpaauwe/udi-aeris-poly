@@ -41,7 +41,7 @@ The settings for this node are:
 #### Elevation
 	* The elevation of your location, in meters. This is used for the ETo calculation.
 #### Forecast Days
-	* The number of days of forecast data to track (0 - 14)
+	* The number of days of forecast data to track (0 - 12). Note that the basic plan only provides 7 days of data.
 #### Plant Type
 	* Used for the ETo calculation to compensate for different types of ground cover. Default is 0.23
 #### Units
