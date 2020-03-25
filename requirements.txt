@@ -1,2 +1,2 @@
 polyinterface>=2.0.28
-requests=2.0
+requests>=2.0
