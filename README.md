@@ -101,6 +101,8 @@ The nodeserver keeps track of the version number and when a profile rebuild is n
 
 # Release Notes
 
+- 1.0.1 03/30/2020
+   - Fix issues with the profile files.
 - 1.0.0 03/18/2020
    - Initial public release
 - 0.0.1 08/20/2019
