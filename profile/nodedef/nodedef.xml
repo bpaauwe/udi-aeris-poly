@@ -15,9 +15,9 @@
       <st id="GV12" editor="INTENSITY" />
       <st id="GV13" editor="WEATHER" />
       <st id="GV14" editor="PERCENT" />
-      <st id="GV2" editor="TEMERATURE" />
-      <st id="GV3" editor="TEMERATURE" />
-      <st id="GV4" editor="TEMERATURE" />
+      <st id="GV2" editor="TEMPERATURE" />
+      <st id="GV3" editor="TEMPERATURE" />
+      <st id="GV4" editor="TEMPERATURE" />
       <st id="GV6" editor="RAIN" />
       <st id="SOLRAD" editor="SOLARRAD" />
       <st id="UV" editor="UV" />
