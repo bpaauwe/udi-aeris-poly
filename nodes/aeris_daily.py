@@ -48,7 +48,7 @@ class DailyNode(polyinterface.Node):
             'GV12': 25,
             'GV13': 25,
             'GV14': 22,
-            'GV15': 5,
+            'GV15': 82,
             'SPEED': 49,
             'GV5': 49,
             'GV6': 82,
@@ -86,7 +86,7 @@ class DailyNode(polyinterface.Node):
             self.update_driver('GV6', forecast[tags['precipitation']], force, prec=1)
             self.update_driver('GV7', forecast[tags['wind_max']], force, prec=1)
             self.update_driver('GV8', forecast[tags['wind_min']], force, prec=1)
-            self.update_driver('GV15', forecast[tags['snowf']], force, prec=2)
+            self.update_driver('GV15', (float(forecast[tags['snowf']]) * 10), force, prec=2)
             self.update_driver('GV19', int(dow), force)
             self.update_driver('UV', forecast['uvi'], force, prec=1)
             self.update_driver('GV18', forecast['pop'], force, prec=1)

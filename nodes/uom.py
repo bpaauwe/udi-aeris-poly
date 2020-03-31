@@ -40,7 +40,7 @@ def get_uom(units):
             'GV12': 25,     # climate intensity
             'GV13': 25,     # climate conditions
             'GV14': 22,     # cloud conditions
-            'GV15': 5,      # snow depth
+            'GV15': 82,     # snow depth
             'DISTANC': 83,  # visibility (kilometers)
             'UV': 71,       # UV index
             'GV17': 56,     # Air Quality
