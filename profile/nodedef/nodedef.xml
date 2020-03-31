@@ -19,6 +19,7 @@
       <st id="GV3" editor="TEMPERATURE" />
       <st id="GV4" editor="TEMPERATURE" />
       <st id="GV6" editor="RAIN" />
+	  <st id="GV15" editor="RAIN" />
       <st id="SOLRAD" editor="SOLARRAD" />
       <st id="UV" editor="UV" />
     </sts>
@@ -50,6 +51,7 @@
       <st id="SPEED" editor="SPEED" />
       <st id="GV5" editor="SPEED" />
       <st id="GV6" editor="RAIN" />
+	  <st id="GV15" editor="RAIN" />
       <st id="GV7" editor="SPEED" />
       <st id="GV8" editor="SPEED" />
       <st id="GV18" editor="PERCENT" />

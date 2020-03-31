@@ -32,6 +32,7 @@ class DailyNode(polyinterface.Node):
             {'driver': 'SPEED', 'value': 0, 'uom': 49},    # wind speed
             {'driver': 'GV5', 'value': 0, 'uom': 49},      # gust speed
             {'driver': 'GV6', 'value': 0, 'uom': 82},      # precipitation
+            {'driver': 'GV15', 'value': 0, 'uom': 82},     # snow depth
             {'driver': 'GV7', 'value': 0, 'uom': 49},      # wind speed max
             {'driver': 'GV8', 'value': 0, 'uom': 49},      # wind speed min
             {'driver': 'GV18', 'value': 0, 'uom': 22},     # pop
@@ -47,6 +48,7 @@ class DailyNode(polyinterface.Node):
             'GV12': 25,
             'GV13': 25,
             'GV14': 22,
+            'GV15': 5,
             'SPEED': 49,
             'GV5': 49,
             'GV6': 82,
@@ -84,6 +86,7 @@ class DailyNode(polyinterface.Node):
             self.update_driver('GV6', forecast[tags['precipitation']], force, prec=1)
             self.update_driver('GV7', forecast[tags['wind_max']], force, prec=1)
             self.update_driver('GV8', forecast[tags['wind_min']], force, prec=1)
+            self.update_driver('GV15', forecast[tags['snowf']], force, prec=2)
             self.update_driver('GV19', int(dow), force)
             self.update_driver('UV', forecast['uvi'], force, prec=1)
             self.update_driver('GV18', forecast['pop'], force, prec=1)

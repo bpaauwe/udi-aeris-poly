@@ -159,6 +159,8 @@ class Controller(polyinterface.Controller):
             self.tag['winddir'] = 'windDirDEG'
             self.tag['visibility'] = 'visibilityKM'
             self.tag['precipitation'] = 'precipMM'
+            self.tag['snow'] = 'snowDepthCM'
+            self.tag['snowf'] = 'snowCM'
             self.tag['dewpoint'] = 'dewpointC'
             self.tag['heatindex'] = 'heatindexC'
             self.tag['windchill'] = 'windchillC'
@@ -185,6 +187,8 @@ class Controller(polyinterface.Controller):
             self.tag['winddir'] = 'windDirDEG'
             self.tag['visibility'] = 'visibilityMI'
             self.tag['precipitation'] = 'precipIN'
+            self.tag['snow'] = 'snowDepthIN'
+            self.tag['snowf'] = 'snowIN'
             self.tag['dewpoint'] = 'dewpointF'
             self.tag['heatindex'] = 'heatindexF'
             self.tag['windchill'] = 'windchillF'
@@ -247,6 +251,7 @@ class Controller(polyinterface.Controller):
             self.update_driver('GV2', ob[self.tag['feelslike']])
             self.update_driver('SOLRAD', ob[self.tag['solarrad']])
             self.update_driver('UV', ob[self.tag['uv']])
+            self.update_driver('GV15', ob[self.tag['snow']])
             # Weather conditions:
             #  ob['weather']
             #  ob['weatherShort']
@@ -414,6 +419,7 @@ class Controller(polyinterface.Controller):
             {'driver': 'GV3', 'value': 0, 'uom': 4},       # heat index
             {'driver': 'GV4', 'value': 0, 'uom': 4},       # wind chill
             {'driver': 'GV6', 'value': 0, 'uom': 82},      # rain
+            {'driver': 'GV15', 'value': 0, 'uom': 82},     # snow depth
             {'driver': 'GV11', 'value': 0, 'uom': 25},     # climate coverage
             {'driver': 'GV12', 'value': 0, 'uom': 25},     # climate intensity
             {'driver': 'GV13', 'value': 0, 'uom': 25},     # climate conditions
