@@ -101,6 +101,9 @@ The nodeserver keeps track of the version number and when a profile rebuild is n
 
 # Release Notes
 
+- 1.0.2 03/30/2020
+   - Add snow depth to current conditions and forecasts
+   - change "rain today" to "precipitation"
 - 1.0.1 03/30/2020
    - Fix issues with the profile files.
 - 1.0.0 03/18/2020
