@@ -133,6 +133,9 @@ class Controller(polyinterface.Controller):
             request += '&precise'
             request += '&limit=12'
 
+        if extra == 'observations/summary':
+            request += '&fields=periods.summary.precip'
+
         #FIXME: add unit support if available
         #request += '&units=' + self.units
 
@@ -178,6 +181,7 @@ class Controller(polyinterface.Controller):
             self.tag['uv'] = 'uvi'
             self.tag['pop'] = 'pop'
             self.tag['timestamp'] = 'timestamp'
+            self.tag['precip_summary'] = 'totalMM'
         else:
             self.tag['temperature'] = 'tempF'
             self.tag['humidity'] = 'humidity'
@@ -206,6 +210,7 @@ class Controller(polyinterface.Controller):
             self.tag['uv'] = 'uvi'
             self.tag['pop'] = 'pop'
             self.tag['timestamp'] = 'timestamp'
+            self.tag['precip_summary'] = 'totalIN'
 
     def query_conditions(self):
         # Query for the current conditions. We can do this fairly
@@ -215,6 +220,7 @@ class Controller(polyinterface.Controller):
             LOGGER.info('Skipping connection because we aren\'t configured yet.')
             return
 
+        precipitation = 0
 
         try:
             jdata = self.get_weather_data('observations')
@@ -244,7 +250,6 @@ class Controller(polyinterface.Controller):
             self.update_driver('GV5', ob[self.tag['gustspeed']])
             self.update_driver('WINDDIR', ob[self.tag['winddir']])
             self.update_driver('DISTANC', ob[self.tag['visibility']])
-            self.update_driver('GV6', ob[self.tag['precipitation']])
             self.update_driver('DEWPT', ob[self.tag['dewpoint']])
             self.update_driver('GV3', ob[self.tag['heatindex']])
             self.update_driver('GV4', ob[self.tag['windchill']])
@@ -273,6 +278,9 @@ class Controller(polyinterface.Controller):
             #  ob['cloudsCoded'] ??
             self.update_driver('GV14', ob['sky'])
 
+            # precipitation
+            precipitation = ob[self.tag['precipitation']]
+
             '''
             TODO:
             - weather
@@ -280,9 +288,30 @@ class Controller(polyinterface.Controller):
             - ceiling
             - light
             '''
+
         except Exception as e:
             LOGGER.error('Current observation update failure')
             LOGGER.error(e)
+
+        try:
+            # Get precipitation summary
+            jdata = self.get_weather_data('observations/summary')
+            if jdata == None:
+                LOGGER.error('Precipitation summary query returned no data')
+                return
+            if 'response' not in jdata:
+                LOGGER.error('No response object in query response.')
+                return
+            #LOGGER.debug(jdata)
+            rd = jdata['response']['periods'][0]['summary']
+            if 'precip' in rd:
+                LOGGER.debug('Setting precipitation to: ' + str(rd['precip'][self.tag['precip_summary']]))
+                self.update_driver('GV6', rd['precip'][self.tag['precip_summary']])
+        except Exception as e:
+            LOGGER.error('Precipitation summary update failure')
+            LOGGER.error(e)
+            self.update_driver('GV6', precipitation)
+                
 
     def query_forecast(self):
         if not self.configured:
