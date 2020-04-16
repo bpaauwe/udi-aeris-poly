@@ -89,7 +89,7 @@ class DailyNode(polyinterface.Node):
             if tags['snowf'] in forecast:
                 if self.units == 'metric':
                     snow = float(forecast[tags['snowf']]) * 10
-                else
+                else:
                     snow = float(forecast[tags['snowf']])
 
                 self.update_driver('GV15', snow, force, prec=2)

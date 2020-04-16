@@ -101,6 +101,8 @@ The nodeserver keeps track of the version number and when a profile rebuild is n
 
 # Release Notes
 
+- 1.0.6 04/16/2020
+   - fix syntax error introduced with previous change
 - 1.0.5 04/16/2020
    - snowfall in inches incorrectly was multiplied by 10.
 - 1.0.4 04/07/2020
