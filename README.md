@@ -101,6 +101,8 @@ The nodeserver keeps track of the version number and when a profile rebuild is n
 
 # Release Notes
 
+- 1.0.5 04/16/2020
+   - snowfall in inches incorrectly was multiplied by 10.
 - 1.0.4 04/07/2020
    - Handle precipitation summary response if it's either a list or dictionary
 - 1.0.3 04/07/2020
