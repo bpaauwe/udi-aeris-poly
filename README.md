@@ -58,6 +58,7 @@ The settings for this node are:
  * sys.node.[address].WINDDIR (current wind direction )
  * sys.node.[address].DISTANC (current visibility)
  * sys.node.[address].SOLRAD  (current solar radiation)
+ * sys.node.[address].UV      (current uv index)
  * sys.node.[address].GV5     (current gust speed)
  * sys.node.[address].GV11    (current condition coverage)
  * sys.node.[address].GV12    (current intensity of conditions)
@@ -82,8 +83,10 @@ The settings for this node are:
  * sys.node.[address].SPEED   (forecasted wind speed)
  * sys.node.[address].GV5     (forecasted gust speed)
  * sys.node.[address].GV6     (forecasted precipitation)
+ * sys.node.[address].GV15    (forecasted snowfall)
  * sys.node.[address].GV7     (forecasted max wind speed)
  * sys.node.[address].GV8     (forecasted min wind speed)
+ * sys.node.[address].GV18    (forecasted precent chance of precipitation)
  * sys.node.[address].GV20    (calculated ETo for the day)
 
 ## Requirements
