@@ -303,7 +303,10 @@ class Controller(polyinterface.Controller):
                 LOGGER.error('No response object in query response.')
                 return
             #LOGGER.debug(jdata)
-            rd = jdata['response']['periods'][0]['summary']
+            if type(jdata['response']) is list:
+                rd = jdata['response'][0]['periods'][0]['summary']
+            else:
+                rd = jdata['response']['periods'][0]['summary']
             if 'precip' in rd:
                 LOGGER.debug('Setting precipitation to: ' + str(rd['precip'][self.tag['precip_summary']]))
                 self.update_driver('GV6', rd['precip'][self.tag['precip_summary']])
