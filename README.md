@@ -104,6 +104,8 @@ The nodeserver keeps track of the version number and when a profile rebuild is n
 
 # Release Notes
 
+- 1.0.7 06/17/2020
+   - update editor for ETo to include inches/day
 - 1.0.6 04/16/2020
    - fix syntax error introduced with previous change
 - 1.0.5 04/16/2020

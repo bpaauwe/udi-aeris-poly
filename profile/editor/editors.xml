@@ -60,6 +60,7 @@
     </editor>
     <editor id="ET">
         <range uom="106" min="0" max="100" prec="2" />
+        <range uom="120" min="0" max="100" prec="3" />
     </editor>
     <editor id="DISTANCE">
         <range uom="116" min="0" max="500" prec="2" />
