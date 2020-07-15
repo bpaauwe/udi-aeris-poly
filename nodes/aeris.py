@@ -442,8 +442,8 @@ class Controller(polyinterface.Controller):
             {'driver': 'DEWPT', 'value': 0, 'uom': 4},     # dewpoint
             {'driver': 'BARPRES', 'value': 0, 'uom': 117}, # pressure
             {'driver': 'WINDDIR', 'value': 0, 'uom': 76},  # direction
-            {'driver': 'SPEED', 'value': 0, 'uom': 49},    # wind speed
-            {'driver': 'GV5', 'value': 0, 'uom': 49},      # gust speed
+            {'driver': 'SPEED', 'value': 0, 'uom': 32},    # wind speed
+            {'driver': 'GV5', 'value': 0, 'uom': 32},      # gust speed
             {'driver': 'GV2', 'value': 0, 'uom': 4},       # feels like
             {'driver': 'GV3', 'value': 0, 'uom': 4},       # heat index
             {'driver': 'GV4', 'value': 0, 'uom': 4},       # wind chill
