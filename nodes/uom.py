@@ -29,11 +29,11 @@ def get_uom(units):
             'GV2': 4,       # ??feels like
             'GV3': 4,       # heat index  
             'GV4': 4,       # wind chill
-            'SPEED': 49,    # wind speed
-            'GV5': 49,      # wind gusts
+            'SPEED': 32,    # wind speed
+            'GV5': 32,      # wind gusts
             'GV6': 82,      # rain
-            'GV7': 49,      # wind max
-            'GV8': 49,      # wind min  
+            'GV7': 32,      # wind max
+            'GV8': 32,      # wind min  
             'GV9': 56,      # moon phase
             'GV10': 56,     # ozone
             'GV11': 25,     # climate coverage
