@@ -17,7 +17,7 @@
     </editor>
     <editor id="SPEED">
         <range uom="48" min="0" max="500" prec="0" />
-        <range uom="49" min="0" max="500" prec="0" />
+        <range uom="32" min="0" max="500" prec="0" />
     </editor>
     <editor id="DEGREES">
         <range uom="76" min="0" max="360" prec="0" />
