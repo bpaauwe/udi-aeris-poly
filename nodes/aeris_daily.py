@@ -29,12 +29,12 @@ class DailyNode(polyinterface.Node):
             {'driver': 'GV12', 'value': 0, 'uom': 25},     # intensity
             {'driver': 'GV13', 'value': 0, 'uom': 25},     # weather
             {'driver': 'GV14', 'value': 0, 'uom': 22},     # clouds
-            {'driver': 'SPEED', 'value': 0, 'uom': 49},    # wind speed
-            {'driver': 'GV5', 'value': 0, 'uom': 49},      # gust speed
+            {'driver': 'SPEED', 'value': 0, 'uom': 32},    # wind speed
+            {'driver': 'GV5', 'value': 0, 'uom': 32},      # gust speed
             {'driver': 'GV6', 'value': 0, 'uom': 82},      # precipitation
             {'driver': 'GV15', 'value': 0, 'uom': 82},     # snow depth
-            {'driver': 'GV7', 'value': 0, 'uom': 49},      # wind speed max
-            {'driver': 'GV8', 'value': 0, 'uom': 49},      # wind speed min
+            {'driver': 'GV7', 'value': 0, 'uom': 32},      # wind speed max
+            {'driver': 'GV8', 'value': 0, 'uom': 32},      # wind speed min
             {'driver': 'GV18', 'value': 0, 'uom': 22},     # pop
             {'driver': 'UV', 'value': 0, 'uom': 71},       # UV index
             {'driver': 'GV20', 'value': 0, 'uom': 106},    # mm/day
@@ -49,11 +49,11 @@ class DailyNode(polyinterface.Node):
             'GV13': 25,
             'GV14': 22,
             'GV15': 82,
-            'SPEED': 49,
-            'GV5': 49,
+            'SPEED': 32,
+            'GV5': 32,
             'GV6': 82,
-            'GV7': 49,
-            'GV8': 49,
+            'GV7': 32,
+            'GV8': 32,
             'UV': 71,
             'GV20': 106,
             'GV18': 22,
