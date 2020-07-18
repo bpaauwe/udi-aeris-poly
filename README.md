@@ -104,6 +104,10 @@ The nodeserver keeps track of the version number and when a profile rebuild is n
 
 # Release Notes
 
+- 1.0.8 07/18/2020
+   - Fix UOM for windspeed. Metric UOM is KPH, not M/S.
+   - Update temperature range for celcius to go lower.
+   - Fix error when Aeris data is different than originally expected.
 - 1.0.7 06/17/2020
    - update editor for ETo to include inches/day
 - 1.0.6 04/16/2020
