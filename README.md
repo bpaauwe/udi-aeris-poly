@@ -104,6 +104,8 @@ The nodeserver keeps track of the version number and when a profile rebuild is n
 
 # Release Notes
 
+- 1.0.10 07/19/2020
+   - Correct latitude parsing and add error checking.
 - 1.0.9 07/18/2020
    - Add kph2ms function to convert windspeed for ETo calculation
    - Fix condition so that the conversion needed when not metric are correct.
