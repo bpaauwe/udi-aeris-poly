@@ -242,7 +242,13 @@ class Controller(polyinterface.Controller):
                 LOGGER.error('No observation object in query response.')
                 return
 
-            self.latitude = float(jdata['response']['lat'])
+            if 'loc' in jdata['response']:
+                if 'lat' in jdata['response']['loc']:
+                    self.latitude = float(jdata['response']['loc']['lat'])
+                else:
+                    LOGGER.error('No latitude data in response.')
+            else:
+                LOGGER.error('No location data in response.')
 
             ob = jdata['response']['ob']
 
