@@ -104,6 +104,10 @@ The nodeserver keeps track of the version number and when a profile rebuild is n
 
 # Release Notes
 
+- 1.0.9 07/18/2020
+   - Add kph2ms function to convert windspeed for ETo calculation
+   - Fix condition so that the conversion needed when not metric are correct.
+   - Add update latitude data from current observation data.
 - 1.0.8 07/18/2020
    - Fix UOM for windspeed. Metric UOM is KPH, not M/S.
    - Update temperature range for celcius to go lower.

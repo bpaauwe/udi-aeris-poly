@@ -13,7 +13,7 @@
     "credits": [ {
 	"title": "AERIS Weather: A node server for weather data",
     	"author": "Bob Paauwe",
-    	"version": "1.0.8",
+    	"version": "1.0.9",
     	"date": "July 18, 2020",
     	"source": "https://github.com/bpaauwe/udi-aeris-poly",
 	"license": "https://github.com/bpaauwe/udi-aeris-poly/LICENSE"
