@@ -21,9 +21,9 @@ MIT license.
 The settings for this node are:
 
 #### Short Poll
-   * How often to poll the AERIS weather service for current condition data (in seconds). Note that the PWS partner plan only allows for 1000 requests per day so set this appropriately.
+   * How often to poll the AERIS weather service for current condition data (in seconds). Note that the PWS partner plan only allows for 1000 requests per day so set this appropriately. Also note that two queries are made during each poll.
 #### Long Poll
-   * How often to poll the AERIS weather service for forecast data (in seconds). Note that the data is only updated every 10 minutes. Setting this to less may result in exceeding the free service rate limit.
+   * How often to poll the AERIS weather service for forecast data (in seconds). Note that the data is only updated every 15 minutes. Setting this to less may result in exceeding the free service rate limit.
 #### ClientID
 	* Your AERIS client ID, needed to authorize the connection the the AERIS API.
 #### ClientSecret
