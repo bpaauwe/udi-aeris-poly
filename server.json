@@ -7,8 +7,8 @@
     "install_cloud": "install_cloud.sh",
     "description": "Add weather data to the ISY994",
     "notice": "",
-    "shortPoll": "120",
-    "longPoll": "600",
+    "shortPoll": "200",
+    "longPoll": "900",
     "profile_version": "1.0.4",
     "credits": [ {
 	"title": "AERIS Weather: A node server for weather data",
