@@ -22,7 +22,7 @@ def w2mj (watt):  # watts/m2 to megajoul/m2
     return watt * 0.0864
 
 def mph2ms (mph): # MPH to m/s
-    return mph * 0.477
+    return mph * 0.447
 
 def kph2ms (kph): # KPH to m/s
     return kph / 3.6
