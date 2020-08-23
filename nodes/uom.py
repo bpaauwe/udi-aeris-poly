@@ -34,8 +34,8 @@ def get_uom(units):
             'GV6': 82,      # rain
             'GV7': 32,      # wind max
             'GV8': 32,      # wind min  
-            'GV9': 56,      # moon phase
-            'GV10': 56,     # ozone
+            'GV9': 32,      # wind avg
+            'GV10': 4,      # avg temp
             'GV11': 25,     # climate coverage
             'GV12': 25,     # climate intensity
             'GV13': 25,     # climate conditions
@@ -43,7 +43,8 @@ def get_uom(units):
             'GV15': 82,     # snow depth
             'DISTANC': 83,  # visibility (kilometers)
             'UV': 71,       # UV index
-            'GV17': 56,     # Air Quality
+            'GV16': 22,     # max humidity
+            'GV17': 22,     # min humidity
             'GV18': 22,     # chance of precipitation
             'GV19': 25,     # day of week
             'GV20': 106,    # ETo
@@ -68,8 +69,8 @@ def get_uom(units):
             'GV6': 105,     # rain
             'GV7': 48,      # max wind
             'GV8': 48,      # min wind  
-            'GV9': 56,      # moon phase
-            'GV10': 56,     # ozone
+            'GV9': 48,      # avg wind
+            'GV10': 4,      # avg temp
             'GV11': 25,     # climate coverage
             'GV12': 25,     # climate intensity
             'GV13': 25,     # climate conditions
@@ -77,7 +78,8 @@ def get_uom(units):
             'GV15': 105,    # snow depth
             'DISTANC': 116, # visibility
             'UV': 71,       # UV index
-            'GV17': 56,     # Air Quality
+            'GV16': 22,     # max humidity
+            'GV17': 22,     # min humidity
             'GV18': 22,     # chance of precipitation
             'GV19': 25,     # day of week
             'GV20': 120,    # ETo
@@ -102,8 +104,8 @@ def get_uom(units):
             'GV6': 105,     # rain
             'GV7': 48,      # max wind
             'GV8': 48,      # min wind   
-            'GV9': 56,      # moon phase
-            'GV10': 56,     # ozone
+            'GV9': 48,      # avg wind
+            'GV10': 17,     # avg temp
             'GV11': 25,     # climate coverage
             'GV12': 25,     # climate intensity
             'GV13': 25,     # climate conditions
@@ -111,7 +113,8 @@ def get_uom(units):
             'GV15': 105,    # snow depth
             'DISTANC': 116, # visibility
             'UV': 71,       # UV index
-            'GV17': 56,     # Air Quality
+            'GV16': 22,     # max humidity
+            'GV17': 22,     # min humidity
             'GV18': 22,     # chance of precipitation
             'GV19': 25,     # day of week
             'GV20': 120,    # ETo
