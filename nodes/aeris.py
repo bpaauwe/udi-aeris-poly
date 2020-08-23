@@ -19,6 +19,7 @@ import json
 import node_funcs
 from nodes import aeris_daily
 from nodes import uom
+from nodes import et3
 from nodes import weather_codes as wx
 
 LOGGER = polyinterface.LOGGER
@@ -119,6 +120,9 @@ class Controller(polyinterface.Controller):
 
     def shortPoll(self):
         self.query_conditions()
+        
+    def mm2inch(self, mm):
+        return mm/25.4       
 
     # Query for the condition an forecast data
     def get_weather_data(self, extra, lat=None, long=None):
@@ -129,12 +133,10 @@ class Controller(polyinterface.Controller):
         request += '&client_secret=' + self.params.get('ClientSecret')
 
         if extra == 'forecasts':
-            request += '&filter=mdnt2mdnt'
-            request += '&precise'
+            request += '&filter=mdnt2mdnt,precise'
             request += '&limit=12'
-
-        if extra == 'observations/summary':
-            request += '&fields=periods.summary.precip'
+        else:
+            request += '&filter=precise'
 
         #FIXME: add unit support if available
         #request += '&units=' + self.units
