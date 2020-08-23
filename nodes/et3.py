@@ -112,12 +112,13 @@ def calc_solar_radiation(t_min, t_max, lat, declination, julian_day):
 # latitude in degrees
 # avg_ws in m/s
 # solar_radiation in W/m2
-def evapotranspriation(max_t, min_t, solar_radiation, avg_ws, elevation, max_h, min_h, latitude, canopy_coefficient, day):
+def evapotranspriation(max_t, min_t, solar_radiation, avg_ws, elevation, max_h, min_h, latitude, canopy_coefficient, day, mean_daily_temp):
 
     julian_day = day
 
     # step 1, mean daily air temperature C
-    mean_daily_temp = (max_t + min_t) / 2.0
+    if mean_daily_temp == None:
+       mean_daily_temp = (max_t + min_t) / 2.0
 
     # step 2, mean solar radiation in mgajoules / m2
     #Rs = w2mj(solar_radiation)
@@ -199,12 +200,12 @@ def evapotranspriation(max_t, min_t, solar_radiation, avg_ws, elevation, max_h, 
 
 
 if __name__ == '__main__':
-    #et0 = evapotranspriation(27.3, 10.7, 16.502, 1.3, 98.5, 36, 91, 36.82, 0.17, 289)
+    #et0 = evapotranspriation(27.3, 10.7, 16.502, 1.3, 98.5, 36, 91, 36.82, 0.17, 289, None)
 
     # 0.23 is the crop / type coefficent
     # 289 is day of year
 
-    et0 = evapotranspriation(27.3, 10.7, None, 1.3, 401.33, 91, 36, 36.82, 0.23, 289)
+    et0 = evapotranspriation(27.3, 10.7, None, 1.3, 401.33, 91, 36, 36.82, 0.23, 289, None)
     print("et0 = ", et0)
 
 
