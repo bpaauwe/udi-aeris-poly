@@ -24,6 +24,8 @@ class DailyNode(polyinterface.Node):
             {'driver': 'GV0', 'value': 0, 'uom': 4},       # high temp
             {'driver': 'GV1', 'value': 0, 'uom': 4},       # low temp
             {'driver': 'CLIHUM', 'value': 0, 'uom': 22},   # humidity
+            {'driver': 'GV16', 'value': 0, 'uom': 22},     # humidity max
+            {'driver': 'GV17', 'value': 0, 'uom': 22},     # humidity min         
             {'driver': 'BARPRES', 'value': 0, 'uom': 117}, # pressure
             {'driver': 'GV11', 'value': 0, 'uom': 25},     # coverage
             {'driver': 'GV12', 'value': 0, 'uom': 25},     # intensity
@@ -54,6 +56,8 @@ class DailyNode(polyinterface.Node):
             'GV6': 82,
             'GV7': 32,
             'GV8': 32,
+            'GV16': 22,
+            'GV17': 22,              
             'UV': 71,
             'GV20': 106,
             'GV18': 22,
@@ -76,7 +80,7 @@ class DailyNode(polyinterface.Node):
 
         humidity = (forecast[tags['humidity_min']] + forecast[tags['humidity_max']]) / 2
         try:
-            self.update_driver('CLIHUM', humidity, force, prec=0)
+            self.update_driver('CLIHUM', humidity, force, prec=1)            
             self.update_driver('BARPRES', forecast[tags['pressure']], force, prec=1)
             self.update_driver('GV0', forecast[tags['temp_max']], force, prec=1)
             self.update_driver('GV1', forecast[tags['temp_min']], force, prec=1)
@@ -86,6 +90,8 @@ class DailyNode(polyinterface.Node):
             self.update_driver('GV6', forecast[tags['precipitation']], force, prec=1)
             self.update_driver('GV7', forecast[tags['wind_max']], force, prec=1)
             self.update_driver('GV8', forecast[tags['wind_min']], force, prec=1)
+            self.update_driver('GV16', forecast[tags['humidity_max']], force, prec=0)
+            self.update_driver('GV17', forecast[tags['humidity_min']], force, prec=0)            
             if tags['snowf'] in forecast:
                 if self.units == 'metric':
                     snow = float(forecast[tags['snowf']]) * 10
