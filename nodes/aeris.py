@@ -541,15 +541,24 @@ class Controller(polyinterface.Controller):
             {'driver': 'WINDDIR', 'value': 0, 'uom': 76},  # direction
             {'driver': 'SPEED', 'value': 0, 'uom': 32},    # wind speed
             {'driver': 'GV5', 'value': 0, 'uom': 32},      # gust speed
+            {'driver': 'GV0', 'value': 0, 'uom': 4},       # max temp
+            {'driver': 'GV1', 'value': 0, 'uom': 4},       # min temp        
             {'driver': 'GV2', 'value': 0, 'uom': 4},       # feels like
             {'driver': 'GV3', 'value': 0, 'uom': 4},       # heat index
             {'driver': 'GV4', 'value': 0, 'uom': 4},       # wind chill
             {'driver': 'GV6', 'value': 0, 'uom': 82},      # rain
+            {'driver': 'GV7', 'value': 0, 'uom': 32},      # max wind
+            {'driver': 'GV8', 'value': 0, 'uom': 32},      # min wind
+            {'driver': 'GV9', 'value': 0, 'uom': 32},      # avg wind 
+            {'driver': 'GV10', 'value': 0, 'uom': 4},      # avg temp            
             {'driver': 'GV15', 'value': 0, 'uom': 82},     # snow depth
             {'driver': 'GV11', 'value': 0, 'uom': 25},     # climate coverage
             {'driver': 'GV12', 'value': 0, 'uom': 25},     # climate intensity
             {'driver': 'GV13', 'value': 0, 'uom': 25},     # climate conditions
             {'driver': 'GV14', 'value': 0, 'uom': 22},     # cloud conditions
+            {'driver': 'GV16', 'value': 0, 'uom': 22},     # max humidity  
+            {'driver': 'GV17', 'value': 0, 'uom': 22},     # min humidity          
+            {'driver': 'GV20', 'value': 0, 'uom': 106},    # mm/day ETo         
             {'driver': 'DISTANC', 'value': 0, 'uom': 83},  # visibility
             {'driver': 'SOLRAD', 'value': 0, 'uom': 74},   # solar radiataion
             {'driver': 'UV', 'value': 0, 'uom': 71},       # uv index
