@@ -323,7 +323,7 @@ class Controller(polyinterface.Controller):
             LOGGER.error(e)
 
         try:
-            # Get precipitation summary
+            # Get precipitation and max/min/average summary
             jdata = self.get_weather_data('observations/summary')
             if jdata == None:
                 LOGGER.error('Precipitation summary query returned no data')
@@ -339,8 +339,27 @@ class Controller(polyinterface.Controller):
             if 'precip' in rd:
                 LOGGER.debug('Setting precipitation to: ' + str(rd['precip'][self.tag['precip_summary']]))
                 self.update_driver('GV6', rd['precip'][self.tag['precip_summary']])
+            if 'temp' in rd:
+                LOGGER.debug('Setting avg temp to: ' + str(rd['temp'][self.tag['temp_avg']]))
+                self.update_driver('GV10', rd['temp'][self.tag['temp_avg']])
+                LOGGER.debug('Setting max temp to: ' + str(rd['temp'][self.tag['temp_max_summ']]))
+                self.update_driver('GV0', rd['temp'][self.tag['temp_max_summ']])
+                LOGGER.debug('Setting min temp to: ' + str(rd['temp'][self.tag['temp_min_summ']]))
+                self.update_driver('GV1', rd['temp'][self.tag['temp_min_summ']])
+            if 'wind' in rd:
+                LOGGER.debug('Setting avg wind to: ' + str(rd['wind'][self.tag['wind_avg']]))
+                self.update_driver('GV9', rd['wind'][self.tag['wind_avg']])
+                LOGGER.debug('Setting max wind to: ' + str(rd['wind'][self.tag['wind_max_summ']]))
+                self.update_driver('GV7', rd['wind'][self.tag['wind_max_summ']])
+                LOGGER.debug('Setting min wind to: ' + str(rd['wind'][self.tag['wind_min_summ']]))
+                self.update_driver('GV8', rd['wind'][self.tag['wind_min_summ']])
+            if 'rh' in rd: 
+                LOGGER.debug('Setting max humid to: ' + str(rd['rh'][self.tag['humidity_max_summ']]))
+                self.update_driver('GV16', rd['rh'][self.tag['humidity_max_summ']])         
+                LOGGER.debug('Setting min humid to: ' + str(rd['rh'][self.tag['humidity_min_summ']]))
+                self.update_driver('GV17', rd['rh'][self.tag['humidity_min_summ']])                  
         except Exception as e:
-            LOGGER.error('Precipitation summary update failure')
+            LOGGER.error('Precipitation and max/min/average summary update failure')
             LOGGER.error(e)
             self.update_driver('GV6', precipitation)
                 
