@@ -362,7 +362,53 @@ class Controller(polyinterface.Controller):
             LOGGER.error('Precipitation and max/min/average summary update failure')
             LOGGER.error(e)
             self.update_driver('GV6', precipitation)
-                
+          try:
+            # Calculate ETo based on actual values
+            # Calculate ETo
+            #  Temp is in degree C and windspeed is in m/s, we may need to
+            #  convert these.
+            epoch = int(rd['timestamp'])
+            J = datetime.datetime.fromtimestamp(epoch).timetuple().tm_yday
+            self.units = self.params.get('Units')
+            Ws = rd['wind'][self.tag['wind_avg']]
+            Tmax = rd['temp'][self.tag['temp_max_summ']]
+            Tmin = rd['temp'][self.tag['temp_min_summ']]
+            Tavg = rd['temp'][self.tag['temp_avg']]
+            SolRad = rd['solrad'][self.tag['solarrad_summ']]
+            if SolRad == 'Null' or SolRad == 0:
+               SolRad = None
+            Elevation = float(self.params.get('Elevation'))
+            Hmax = rd['rh'][self.tag['humidity_max_summ']]
+            Hmin = rd['rh'][self.tag['humidity_min_summ']]
+            Latitude = self.latitude
+            if self.units != 'metric':
+                LOGGER.info('Conversion of temperature/wind speed required')
+                Tmin = et3.FtoC(Tmin)
+                Tmax = et3.FtoC(Tmax)
+                Tavg = et3.FtoC(Tavg)              
+                Ws = et3.mph2ms(Ws)
+            else:
+                LOGGER.info('Conversion of wind speed required')
+                Ws = et3.kph2ms(Ws)            
+            LOGGER.debug('Tmax= '+str(Tmax)+'C')
+            LOGGER.debug('Tmin= '+str(Tmin)+'C')           
+            LOGGER.debug('Tavg= '+str(Tavg)+'C')  
+            LOGGER.debug('Elevation= '+str(Elevation))
+            LOGGER.debug('Hmax= '+str(Hmax))
+            LOGGER.debug('Hmin= '+str(Hmin))
+            LOGGER.debug('SolRad= '+str(SolRad)+' WM2')  
+            LOGGER.debug('J= '+str(J))
+            LOGGER.debug('Latitude= '+str(Latitude))
+            LOGGER.debug('Setting Ws: %f m/s' % (Ws))
+            et0 = et3.evapotranspriation(Tmax, Tmin, SolRad, Ws, Elevation, Hmax, Hmin, Latitude, float(self.params.get('Plant Type')), J, Tavg)
+            if self.units == 'metric'
+               self.update_driver('GV20', round(et0, 2))
+            else:
+               self.update_driver('GV20', self.mm2inch(et0), 3)
+            LOGGER.info("ETo Actuals= %f %f" % (et0, self.mm2inch(et0)))
+        except Exception as e:
+            LOGGER.error('ETo based on actuals update failure')
+            LOGGER.error(e)              
 
     def query_forecast(self):
         if not self.configured:
