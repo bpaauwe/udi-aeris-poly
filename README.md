@@ -21,9 +21,9 @@ MIT license.
 The settings for this node are:
 
 #### Short Poll
-   * How often to poll the AERIS weather service for current condition data (in seconds). Note that the PWS partner plan only allows for 1000 requests per day so set this appropriately.
+   * How often to poll the AERIS weather service for current condition data (in seconds). Note that the PWS partner plan only allows for 1000 requests per day so set this appropriately.  Each run of Short Poll uses 2 API calls.
 #### Long Poll
-   * How often to poll the AERIS weather service for forecast data (in seconds). Note that the data is only updated every 10 minutes. Setting this to less may result in exceeding the free service rate limit.
+   * How often to poll the AERIS weather service for forecast data (in seconds). Note that the data is only updated every 15 minutes. Setting this to less may result in exceeding the free service rate limit.
 #### ClientID
 	* Your AERIS client ID, needed to authorize the connection the the AERIS API.
 #### ClientSecret
@@ -50,43 +50,55 @@ The settings for this node are:
 ## Node substitution variables
 ### Current condition node
  * sys.node.[address].ST      (Node sever online)
- * sys.node.[address].CLITEMP (current temperature)
+ * sys.node.[address].GV0     (high temperature)
+ * sys.node.[address].GV1     (low temperature)
  * sys.node.[address].CLIHUM  (current humidity)
- * sys.node.[address].DEWPT   (current dew point)
- * sys.node.[address].BARPRES (current barometric pressure)
- * sys.node.[address].SPEED   (current wind speed)
- * sys.node.[address].WINDDIR (current wind direction )
- * sys.node.[address].DISTANC (current visibility)
- * sys.node.[address].SOLRAD  (current solar radiation)
- * sys.node.[address].UV      (current uv index)
- * sys.node.[address].GV5     (current gust speed)
+ * sys.node.[address].GV16    (max humidity)
+ * sys.node.[address].GV17    (min humidity)
  * sys.node.[address].GV11    (current condition coverage)
  * sys.node.[address].GV12    (current intensity of conditions)
  * sys.node.[address].GV13    (current weather conditions)
  * sys.node.[address].GV14    (current percent cloud coverage)
+ * sys.node.[address].BARPRES (current barometric pressure)
+ * sys.node.[address].SPEED   (current wind speed)
+ * sys.node.[address].WINDDIR (current wind direction )
+ * sys.node.[address].GV5     (current gust speed)
+ * sys.node.[address].GV9     (average wind speed)
  * sys.node.[address].GV6     (current precipitation accumulation)
+ * sys.node.[address].GV15    (current snowfall)
+ * sys.node.[address].DEWPT   (current dew point)
+ * sys.node.[address].GV10    (average temperature)
+ * sys.node.[address].CLITEMP (current temperature)
+ * sys.node.[address].DISTANC (current visibility)
+ * sys.node.[address].UV      (current uv index)
+ * sys.node.[address].GV20    (calculated ETo for the day)
+ * sys.node.[address].SOLRAD  (current solar radiation)
  * sys.node.[address].GV2     (current feels like temperature)
+ * sys.node.[address].GV7     (max wind speed)
+ * sys.node.[address].GV8     (min wind speed)
  * sys.node.[address].GV3     (current heat index temperature)
  * sys.node.[address].GV4     (current wind chill temperature)
 
 ### Forecast node
- * sys.node.[address].CLIHUM  (forecasted humidity)
- * sys.node.[address].BARPRES (forecasted barometric pressure)
- * sys.node.[address].UV      (forecasted max UV index)
  * sys.node.[address].GV19    (day of week forecast is for)
  * sys.node.[address].GV0     (forecasted high temperature)
  * sys.node.[address].GV1     (forecasted low temperature)
+ * sys.node.[address].CLIHUM  (forecasted humidity)
+ * sys.node.[address].GV16    (forecasted max humidity)
+ * sys.node.[address].GV17    (forecasted min humidity)
  * sys.node.[address].GV11    (forecasted condition coverage)
  * sys.node.[address].GV12    (forecasted intensity of conditions)
  * sys.node.[address].GV13    (forecasted weather conditions)
  * sys.node.[address].GV14    (forecasted percent cloud coverage)
+ * sys.node.[address].BARPRES (forecasted barometric pressure)
  * sys.node.[address].SPEED   (forecasted wind speed)
  * sys.node.[address].GV5     (forecasted gust speed)
- * sys.node.[address].GV6     (forecasted precipitation)
- * sys.node.[address].GV15    (forecasted snowfall)
  * sys.node.[address].GV7     (forecasted max wind speed)
  * sys.node.[address].GV8     (forecasted min wind speed)
+ * sys.node.[address].GV6     (forecasted precipitation)
+ * sys.node.[address].GV15    (forecasted snowfall)
  * sys.node.[address].GV18    (forecasted precent chance of precipitation)
+ * sys.node.[address].UV      (forecasted max UV index)
  * sys.node.[address].GV20    (calculated ETo for the day)
 
 ## Requirements

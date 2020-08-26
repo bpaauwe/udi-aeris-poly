@@ -3,25 +3,34 @@
     <editors />
     <sts>
       <st id="ST" editor="bool" />
-      <st id="CLITEMP" editor="TEMPERATURE" />
+      <st id="GV0" editor="TEMPERATURE" />
+      <st id="GV1" editor="TEMPERATURE" />	    
       <st id="CLIHUM" editor="PERCENT" />
-      <st id="DEWPT" editor="TEMPERATURE" />
-      <st id="BARPRES" editor="PRESSURE" />
-      <st id="WINDDIR" editor="DEGREES" />
-      <st id="SPEED" editor="SPEED" />
-      <st id="GV5" editor="SPEED" />
-      <st id="DISTANC" editor="DISTANCE" />
+      <st id="GV16" editor="PERCENT" />	    
+      <st id="GV17" editor="PERCENT" />	    
       <st id="GV11" editor="COVERAGE" />
       <st id="GV12" editor="INTENSITY" />
-      <st id="GV13" editor="WEATHER" />
-      <st id="GV14" editor="PERCENT" />
+      <st id="GV13" editor="WEATHER" />      
+      <st id="GV14" editor="PERCENT" />	    
+      <st id="BARPRES" editor="PRESSURE" />	    
+      <st id="SPEED" editor="SPEED" />	    
+      <st id="WINDDIR" editor="DEGREES" />	    
+      <st id="GV5" editor="SPEED" />
+      <st id="GV9" editor="SPEED" />      
+      <st id="GV6" editor="RAIN" />	    
+      <st id="GV15" editor="RAIN" />  
+      <st id="DEWPT" editor="TEMPERATURE" />	    
+      <st id="GV10" editor="TEMPERATURE" />	    
+      <st id="CLITEMP" editor="TEMPERATURE" />     
+      <st id="DISTANC" editor="DISTANCE" />	    
+      <st id="UV" editor="UV" />	    
+      <st id="GV20" editor="ET" />
+      <st id="SOLRAD" editor="SOLARRAD" />	    
       <st id="GV2" editor="TEMPERATURE" />
+      <st id="GV7" editor="SPEED" />	    
+      <st id="GV8" editor="SPEED" />	    
       <st id="GV3" editor="TEMPERATURE" />
       <st id="GV4" editor="TEMPERATURE" />
-      <st id="GV6" editor="RAIN" />
-	  <st id="GV15" editor="RAIN" />
-      <st id="SOLRAD" editor="SOLARRAD" />
-      <st id="UV" editor="UV" />
     </sts>
     <cmds>
       <sends />
@@ -43,17 +52,19 @@
       <st id="GV0" editor="TEMPERATURE" />
       <st id="GV1" editor="TEMPERATURE" />
       <st id="CLIHUM" editor="PERCENT" />
-      <st id="BARPRES" editor="PRESSURE" />
-      <st id="GV14" editor="PERCENT" />
+      <st id="GV16" editor="PERCENT" />
+      <st id="GV17" editor="PERCENT" />	    
       <st id="GV11" editor="COVERAGE" />
       <st id="GV12" editor="INTENSITY" />
       <st id="GV13" editor="WEATHER" />
+      <st id="GV14" editor="PERCENT" />
+      <st id="BARPRES" editor="PRESSURE" />	    
       <st id="SPEED" editor="SPEED" />
       <st id="GV5" editor="SPEED" />
-      <st id="GV6" editor="RAIN" />
-	  <st id="GV15" editor="RAIN" />
       <st id="GV7" editor="SPEED" />
       <st id="GV8" editor="SPEED" />
+      <st id="GV6" editor="RAIN" />
+      <st id="GV15" editor="RAIN" />      
       <st id="GV18" editor="PERCENT" />
       <st id="UV" editor="UV" />
       <st id="GV20" editor="ET" />

@@ -19,6 +19,7 @@ import json
 import node_funcs
 from nodes import aeris_daily
 from nodes import uom
+from nodes import et3
 from nodes import weather_codes as wx
 
 LOGGER = polyinterface.LOGGER
@@ -119,6 +120,9 @@ class Controller(polyinterface.Controller):
 
     def shortPoll(self):
         self.query_conditions()
+        
+    def mm2inch(self, mm):
+        return mm/25.4       
 
     # Query for the condition an forecast data
     def get_weather_data(self, extra, lat=None, long=None):
@@ -129,12 +133,10 @@ class Controller(polyinterface.Controller):
         request += '&client_secret=' + self.params.get('ClientSecret')
 
         if extra == 'forecasts':
-            request += '&filter=mdnt2mdnt'
-            request += '&precise'
+            request += '&filter=mdnt2mdnt,precise'
             request += '&limit=12'
-
-        if extra == 'observations/summary':
-            request += '&fields=periods.summary.precip'
+        else:
+            request += '&filter=precise'
 
         #FIXME: add unit support if available
         #request += '&units=' + self.units
@@ -169,13 +171,22 @@ class Controller(polyinterface.Controller):
             self.tag['windchill'] = 'windchillC'
             self.tag['feelslike'] = 'feelslikeC'
             self.tag['solarrad'] = 'solradWM2'
+            self.tag['solarrad_summ'] = 'avgWM2'
             self.tag['sky'] = 'sky'
             self.tag['temp_min'] = 'minTempC'
             self.tag['temp_max'] = 'maxTempC'
+            self.tag['temp_avg'] = 'avgC'
+            self.tag['temp_max_summ'] = 'maxC'
+            self.tag['temp_min_summ'] = 'minC'
             self.tag['humidity_min'] = 'minHumidity'
             self.tag['humidity_max'] = 'maxHumidity'
+            self.tag['humidity_min_summ'] = 'min'
+            self.tag['humidity_max_summ'] = 'max'            
             self.tag['wind_min'] = 'windSpeedMinKPH'
             self.tag['wind_max'] = 'windSpeedMaxKPH'
+            self.tag['wind_avg'] = 'avgKPH'
+            self.tag['wind_min_summ'] = 'minKPH'
+            self.tag['wind_max_summ'] = 'maxKPH'
             self.tag['winddir_min'] = 'windDirMinDEG'
             self.tag['winddir_max'] = 'windDirMaxDEG'
             self.tag['uv'] = 'uvi'
@@ -198,14 +209,23 @@ class Controller(polyinterface.Controller):
             self.tag['windchill'] = 'windchillF'
             self.tag['feelslike'] = 'feelslikeF'
             self.tag['solarrad'] = 'solradWM2'
+            self.tag['solarrad_summ'] = 'avgWM2'
             self.tag['sky'] = 'sky'
             self.tag['temp_min'] = 'minTempF'
             self.tag['temp_max'] = 'maxTempF'
+            self.tag['temp_avg'] = 'avgF'
+            self.tag['temp_max_summ'] = 'maxF'
+            self.tag['temp_min_summ'] = 'minF'            
             self.tag['humidity_min'] = 'minHumidity'
             self.tag['humidity_max'] = 'maxHumidity'
+            self.tag['humidity_min_summ'] = 'min'
+            self.tag['humidity_max_summ'] = 'max'            
             self.tag['wind_min'] = 'windSpeedMinMPH'
             self.tag['wind_max'] = 'windSpeedMaxMPH'
-            self.tag['winddir_min'] = 'windDirMinDEG'
+            self.tag['wind_avg'] = 'avgMPH'
+            self.tag['wind_min_summ'] = 'minMPH'
+            self.tag['wind_max_summ'] = 'maxMPH'            
+            self.tag['winddir_min'] = 'windDirMinDEG'            
             self.tag['winddir_max'] = 'windDirMaxDEG'
             self.tag['uv'] = 'uvi'
             self.tag['pop'] = 'pop'
@@ -303,7 +323,7 @@ class Controller(polyinterface.Controller):
             LOGGER.error(e)
 
         try:
-            # Get precipitation summary
+            # Get precipitation and max/min/average summary
             jdata = self.get_weather_data('observations/summary')
             if jdata == None:
                 LOGGER.error('Precipitation summary query returned no data')
@@ -319,11 +339,76 @@ class Controller(polyinterface.Controller):
             if 'precip' in rd:
                 LOGGER.debug('Setting precipitation to: ' + str(rd['precip'][self.tag['precip_summary']]))
                 self.update_driver('GV6', rd['precip'][self.tag['precip_summary']])
+            if 'temp' in rd:
+                LOGGER.debug('Setting avg temp to: ' + str(rd['temp'][self.tag['temp_avg']]))
+                self.update_driver('GV10', rd['temp'][self.tag['temp_avg']])
+                LOGGER.debug('Setting max temp to: ' + str(rd['temp'][self.tag['temp_max_summ']]))
+                self.update_driver('GV0', rd['temp'][self.tag['temp_max_summ']])
+                LOGGER.debug('Setting min temp to: ' + str(rd['temp'][self.tag['temp_min_summ']]))
+                self.update_driver('GV1', rd['temp'][self.tag['temp_min_summ']])
+            if 'wind' in rd:
+                LOGGER.debug('Setting avg wind to: ' + str(rd['wind'][self.tag['wind_avg']]))
+                self.update_driver('GV9', rd['wind'][self.tag['wind_avg']])
+                LOGGER.debug('Setting max wind to: ' + str(rd['wind'][self.tag['wind_max_summ']]))
+                self.update_driver('GV7', rd['wind'][self.tag['wind_max_summ']])
+                LOGGER.debug('Setting min wind to: ' + str(rd['wind'][self.tag['wind_min_summ']]))
+                self.update_driver('GV8', rd['wind'][self.tag['wind_min_summ']])
+            if 'rh' in rd: 
+                LOGGER.debug('Setting max humid to: ' + str(rd['rh'][self.tag['humidity_max_summ']]))
+                self.update_driver('GV16', rd['rh'][self.tag['humidity_max_summ']])         
+                LOGGER.debug('Setting min humid to: ' + str(rd['rh'][self.tag['humidity_min_summ']]))
+                self.update_driver('GV17', rd['rh'][self.tag['humidity_min_summ']])                  
         except Exception as e:
-            LOGGER.error('Precipitation summary update failure')
+            LOGGER.error('Precipitation and max/min/average summary update failure')
             LOGGER.error(e)
             self.update_driver('GV6', precipitation)
-                
+          try:
+            # Calculate ETo based on actual values
+            # Calculate ETo
+            #  Temp is in degree C and windspeed is in m/s, we may need to
+            #  convert these.
+            epoch = int(rd['timestamp'])
+            J = datetime.datetime.fromtimestamp(epoch).timetuple().tm_yday
+            self.units = self.params.get('Units')
+            Ws = rd['wind'][self.tag['wind_avg']]
+            Tmax = rd['temp'][self.tag['temp_max_summ']]
+            Tmin = rd['temp'][self.tag['temp_min_summ']]
+            Tavg = rd['temp'][self.tag['temp_avg']]
+            SolRad = rd['solrad'][self.tag['solarrad_summ']]
+            if SolRad == 'Null' or SolRad == 0:
+               SolRad = None
+            Elevation = float(self.params.get('Elevation'))
+            Hmax = rd['rh'][self.tag['humidity_max_summ']]
+            Hmin = rd['rh'][self.tag['humidity_min_summ']]
+            Latitude = self.latitude
+            if self.units != 'metric':
+                LOGGER.info('Conversion of temperature/wind speed required')
+                Tmin = et3.FtoC(Tmin)
+                Tmax = et3.FtoC(Tmax)
+                Tavg = et3.FtoC(Tavg)              
+                Ws = et3.mph2ms(Ws)
+            else:
+                LOGGER.info('Conversion of wind speed required')
+                Ws = et3.kph2ms(Ws)            
+            LOGGER.debug('Tmax= '+str(Tmax)+'C')
+            LOGGER.debug('Tmin= '+str(Tmin)+'C')           
+            LOGGER.debug('Tavg= '+str(Tavg)+'C')  
+            LOGGER.debug('Elevation= '+str(Elevation))
+            LOGGER.debug('Hmax= '+str(Hmax))
+            LOGGER.debug('Hmin= '+str(Hmin))
+            LOGGER.debug('SolRad= '+str(SolRad)+' WM2')  
+            LOGGER.debug('J= '+str(J))
+            LOGGER.debug('Latitude= '+str(Latitude))
+            LOGGER.debug('Setting Ws: %f m/s' % (Ws))
+            et0 = et3.evapotranspriation(Tmax, Tmin, SolRad, Ws, Elevation, Hmax, Hmin, Latitude, float(self.params.get('Plant Type')), J, Tavg)
+            if self.units == 'metric'
+               self.update_driver('GV20', round(et0, 2))
+            else:
+               self.update_driver('GV20', self.mm2inch(et0), 3)
+            LOGGER.info("ETo Actuals= %f %f" % (et0, self.mm2inch(et0)))
+        except Exception as e:
+            LOGGER.error('ETo based on actuals update failure')
+            LOGGER.error(e)              
 
     def query_forecast(self):
         if not self.configured:
@@ -456,15 +541,24 @@ class Controller(polyinterface.Controller):
             {'driver': 'WINDDIR', 'value': 0, 'uom': 76},  # direction
             {'driver': 'SPEED', 'value': 0, 'uom': 32},    # wind speed
             {'driver': 'GV5', 'value': 0, 'uom': 32},      # gust speed
+            {'driver': 'GV0', 'value': 0, 'uom': 4},       # max temp
+            {'driver': 'GV1', 'value': 0, 'uom': 4},       # min temp        
             {'driver': 'GV2', 'value': 0, 'uom': 4},       # feels like
             {'driver': 'GV3', 'value': 0, 'uom': 4},       # heat index
             {'driver': 'GV4', 'value': 0, 'uom': 4},       # wind chill
             {'driver': 'GV6', 'value': 0, 'uom': 82},      # rain
+            {'driver': 'GV7', 'value': 0, 'uom': 32},      # max wind
+            {'driver': 'GV8', 'value': 0, 'uom': 32},      # min wind
+            {'driver': 'GV9', 'value': 0, 'uom': 32},      # avg wind 
+            {'driver': 'GV10', 'value': 0, 'uom': 4},      # avg temp            
             {'driver': 'GV15', 'value': 0, 'uom': 82},     # snow depth
             {'driver': 'GV11', 'value': 0, 'uom': 25},     # climate coverage
             {'driver': 'GV12', 'value': 0, 'uom': 25},     # climate intensity
             {'driver': 'GV13', 'value': 0, 'uom': 25},     # climate conditions
             {'driver': 'GV14', 'value': 0, 'uom': 22},     # cloud conditions
+            {'driver': 'GV16', 'value': 0, 'uom': 22},     # max humidity  
+            {'driver': 'GV17', 'value': 0, 'uom': 22},     # min humidity          
+            {'driver': 'GV20', 'value': 0, 'uom': 106},    # mm/day ETo         
             {'driver': 'DISTANC', 'value': 0, 'uom': 83},  # visibility
             {'driver': 'SOLRAD', 'value': 0, 'uom': 74},   # solar radiataion
             {'driver': 'UV', 'value': 0, 'uom': 71},       # uv index
