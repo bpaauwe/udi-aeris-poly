@@ -362,7 +362,7 @@ class Controller(polyinterface.Controller):
             LOGGER.error('Precipitation and max/min/average summary update failure')
             LOGGER.error(e)
             self.update_driver('GV6', precipitation)
-          try:
+        try:
             # Calculate ETo based on actual values
             # Calculate ETo
             #  Temp is in degree C and windspeed is in m/s, we may need to
@@ -401,7 +401,7 @@ class Controller(polyinterface.Controller):
             LOGGER.debug('Latitude= '+str(Latitude))
             LOGGER.debug('Setting Ws: %f m/s' % (Ws))
             et0 = et3.evapotranspriation(Tmax, Tmin, SolRad, Ws, Elevation, Hmax, Hmin, Latitude, float(self.params.get('Plant Type')), J, Tavg)
-            if self.units == 'metric'
+            if self.units == 'metric':
                self.update_driver('GV20', round(et0, 2))
             else:
                self.update_driver('GV20', self.mm2inch(et0), 3)
