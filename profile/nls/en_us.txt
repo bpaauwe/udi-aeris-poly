@@ -133,7 +133,7 @@ EN_WEATHER-31 = partly cloudy
 EN_WEATHER-32 = mostly cloudy
 EN_WEATHER-33 = cloudy/overcast
 
-EN_INTENSITY-0 = N/A
+EN_INTENSITY-0 = Moderate
 EN_INTENSITY-1 = very light
 EN_INTENSITY-2 = light
 EN_INTENSITY-3 = heavy
@@ -142,7 +142,7 @@ EN_INTENSITY-4 = very heavy
 EN_COVERAGE-0 = areas of
 EN_COVERAGE-1 = brief
 EN_COVERAGE-2 = chance of
-EN_COVERAGE-3 = difinite
+EN_COVERAGE-3 = definite
 EN_COVERAGE-4 = frequent
 EN_COVERAGE-5 = intermittent
 EN_COVERAGE-6 = isolated
