@@ -104,6 +104,12 @@ The nodeserver keeps track of the version number and when a profile rebuild is n
 
 # Release Notes
 
+- 1.0.12 10/02/2020
+   - Update NLS profile file with typo fix and intensity fix.
+- 1.0.11 08/25/2020
+   - Update polling interval documentation
+   - Fix typo in MPH to m/s conversion function
+   - Update polling interval to not exceed free plan limits
 - 1.0.10 07/19/2020
    - Correct latitude parsing and add error checking.
 - 1.0.9 07/18/2020
