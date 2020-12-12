@@ -104,6 +104,8 @@ The nodeserver keeps track of the version number and when a profile rebuild is n
 
 # Release Notes
 
+- 1.0.13 12/12/2020
+   - Update forecast limit to match Aeris change.
 - 1.0.12 10/02/2020
    - Update NLS profile file with typo fix and intensity fix.
 - 1.0.11 08/25/2020
