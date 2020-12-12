@@ -131,7 +131,7 @@ class Controller(polyinterface.Controller):
         if extra == 'forecasts':
             request += '&filter=mdnt2mdnt'
             request += '&precise'
-            request += '&limit=12'
+            request += '&limit=' + self.params.get('Forecast Days')
 
         if extra == 'observations/summary':
             request += '&fields=periods.summary.precip'
@@ -361,7 +361,7 @@ class Controller(polyinterface.Controller):
         LOGGER.info("In Discovery...")
 
         num_days = int(self.params.get('Forecast Days'))
-        if num_days < 14:
+        if num_days < 7:
             # delete any extra days
             for day in range(num_days, 7):
                 address = 'forecast_' + str(day)
@@ -398,9 +398,9 @@ class Controller(polyinterface.Controller):
         if self.params.get_from_polyglot(self):
             LOGGER.debug('All required parameters are set!')
             self.configured = True
-            if int(self.params.get('Forecast Days')) > 12:
-                addNotice('Number of days of forecast data is limited to 12 days', 'forecast')
-                self.params.set('Forecast Days', 12)
+            if int(self.params.get('Forecast Days')) > 6:
+                addNotice('Number of days of forecast data is limited to 6 days', 'forecast')
+                self.params.set('Forecast Days', 6)
         else:
             LOGGER.debug('Configuration required.')
             LOGGER.debug('ClientID = ' + self.params.get('ClientID'))
